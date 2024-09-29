@@ -14,3 +14,24 @@ que *Developer* pour vous permettre de travailler ensemble sur ce projet.
 
 Vous pouvez retrouver ci-dessous les liens vers les sujets de TP vous guidant
 dans le développement de votre projet.
+
+- [Lancement du projet](https://gitlab.univ-artois.fr/enseignements-rwa/modules/but-2/r3-04/tp/-/tree/main/TP03)
+
+## Diagramme de classes
+
+```plantuml
+```
+
+## Tâches réalisées
+
+### TP n°3
+
+| Fonctionnalité                             | Terminée ? | Auteur(s)                                     |
+| ------------------------------------------ | ---------- | --------------------------------------------- |
+| Représentation des ennemis                 |            |                                               |
+| Intégration des ennemis dans la partie     |            |                                               |
+| Représentation du joueur                   |            |                                               |
+| Intégration du joueur dans la partie       |            |                                               |
+| Représentation des bombes et explosion     |            |                                               |
+| Intégration des bombes dans la partie      |            |                                               |
+| Création de la carte du jeu                |            |                                               |
