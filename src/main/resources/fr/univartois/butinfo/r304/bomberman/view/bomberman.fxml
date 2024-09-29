@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+    minHeight="-Infinity" maxHeight="-Infinity" minWidth="-Infinity" maxWidth="-Infinity"
+    fx:controller="fr.univartois.butinfo.r304.bomberman.controller.BombermanController">
+    <children>
+        <GridPane fx:id="backgroundPane" />
+        <Pane fx:id="movingPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <center>
+                <Label fx:id="message" text="PRESS ANY KEY TO START..." textFill="WHITE" BorderPane.alignment="CENTER">
+                    <font>
+                        <Font name="Monospaced Bold" size="16.0" />
+                    </font>
+                </Label>
+            </center>
+            <bottom>
+                <GridPane BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints vgrow="SOMETIMES" minHeight="10.0" prefHeight="30.0" />
+                    </rowConstraints>
+                    <children>
+                        <Label text="BOMBS: " textFill="WHITE" GridPane.halignment="RIGHT" GridPane.columnIndex="0">
+                            <font>
+                                <Font name="Monospaced Bold" size="13.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="bombs" textFill="WHITE" GridPane.halignment="LEFT" GridPane.columnIndex="1">
+                            <font>
+                                <Font name="Monospaced Bold" size="13.0" />
+                            </font>
+                        </Label>
+                        <Label text="SCORE: " textFill="WHITE" GridPane.halignment="RIGHT" GridPane.columnIndex="2">
+                            <font>
+                                <Font name="Monospaced Bold" size="13.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="score" textFill="WHITE" GridPane.halignment="LEFT" GridPane.columnIndex="3">
+                            <font>
+                                <Font name="Monospaced Bold" size="13.0" />
+                            </font>
+                        </Label>
+                        <Label text="LIFE: " textFill="WHITE" GridPane.halignment="RIGHT" GridPane.columnIndex="4">
+                            <font>
+                                <Font name="Monospaced Bold" size="13.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="life" textFill="WHITE" GridPane.halignment="LEFT" GridPane.columnIndex="5">
+                            <font>
+                                <Font name="Monospaced Bold" size="13.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </GridPane>
+            </bottom>
+        </BorderPane>
+    </children>
+</StackPane>
