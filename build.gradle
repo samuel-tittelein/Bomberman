@@ -6,7 +6,7 @@
 plugins {
     id 'application'
     id 'java'
-    id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
 // La version du langage Java utilisée dans le projet.
