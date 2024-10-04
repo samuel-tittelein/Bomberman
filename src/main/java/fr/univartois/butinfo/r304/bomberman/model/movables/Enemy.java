@@ -18,4 +18,19 @@ public class Enemy extends AbstractMovable {
       double yPosition, Sprite sprite) {
     super(game, xPosition, yPosition, sprite);
   }
+
+  @Override
+  public void collidedWith(IMovable other) {
+    other.hitEnemy();
+  }
+
+  @Override
+  public void explode() {
+    game.removeMovable(this);
+  }
+
+  @Override
+  public void hitEnemy() {
+    explode();
+  }
 }
