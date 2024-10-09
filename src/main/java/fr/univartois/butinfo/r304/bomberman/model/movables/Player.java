@@ -31,6 +31,34 @@ public class Player extends AbstractMovable {
         return score;
     }
 
+    /**
+     * Renvoie la propriété observable des vies du joueur.
+     *
+     * @return IntegerProperty des vies du joueur.
+     */
+    public IntegerProperty getLivesProperty() {
+        return lives;
+    }
+
+    /**
+     * Renvoie la propriété observable du score du joueur.
+     *
+     * @return IntegerProperty du score du joueur.
+     */
+    public IntegerProperty getScoreProperty() {
+        return score;
+    }
+
+    /**
+     * Renvoie la propriété observable des bombes disponibles du joueur.
+     *
+     * @return IntegerProperty des bombes du joueur.
+     */
+    public IntegerProperty getBombsProperty() {
+        return bombs;
+    }
+
+
     public int getScore() {
         return score.get();
     }
