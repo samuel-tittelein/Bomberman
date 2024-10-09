@@ -36,6 +36,10 @@ import javafx.animation.AnimationTimer;
  */
 public final class BombermanGame {
 
+    // Constantes pour la position initiale du joueur. (à modifier potentiellement plus tard)
+    public static final double PLAYER_INITIAL_X = 100.0;  // Position initiale en X
+    public static final double PLAYER_INITIAL_Y = 100.0;  // Position initiale en Y
+
     /**
      * Le génarateur de nombres aléatoires utilisé dans le jeu.
      */
@@ -185,7 +189,7 @@ public final class BombermanGame {
      */
     private void createMovables() {
         // On commence par enlever tous les éléments mobiles encore présents.
-        clearAllMovables();
+        clearAllMovables();Bi
 
         // Création et placement du joueur sur la carte.
         Sprite playerSprite = spriteStore.getSprite("guy"); // Le joueur prend le skin "guy"
