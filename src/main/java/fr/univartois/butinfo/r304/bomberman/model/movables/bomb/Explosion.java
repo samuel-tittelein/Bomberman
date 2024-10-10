@@ -4,6 +4,7 @@ import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.movables.AbstractMovable;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
+import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ public class Explosion extends AbstractMovable {
 
     public static final double EXPLOSION_DURATION = 500; // 1/2 seconde
     private final long explosionBegin;
+    public static SpriteStore spriteStore = new SpriteStore();
 
     /**
      * Crée une nouvelle instance de l'objet Explosion.
@@ -24,6 +26,24 @@ public class Explosion extends AbstractMovable {
                      double yPosition, Sprite sprite){
 
         super(game, xPosition, yPosition, sprite);
+        this.explosionBegin = System.currentTimeMillis();
+    }
+
+    /**
+     * Crée une nouvelle instance de l'objet Explosion.
+     *
+     * @param game Le jeu Bomberman auquel cette explosion est liée.
+     * @param xPosition La position en X où l'explosion se déclenche.
+     * @param yPosition La position en Y où l'explosion se déclenche.
+     * <p>
+     * L'attribut sprite est par défaut initialisé par {@link SpriteStore}
+     * avec pour sprite le sprite "explosion".
+     * </p>
+     */
+    public Explosion(BombermanGame game, double xPosition,
+                     double yPosition){
+
+        super(game, xPosition, yPosition, spriteStore.getSprite("explosion"));
         this.explosionBegin = System.currentTimeMillis();
     }
 
