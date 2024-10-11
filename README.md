@@ -197,6 +197,38 @@ abstract class AbstractMovable implements IMovable {
 AbstractMovable *-- "1" BombermanGame
 AbstractMovable o-- "1" Sprite
 
+class Player extends AbstractMovable {
+    - score: IntegerProperty
+    - lives: IntegerProperty
+
+    + Player(game: BombermanGame, xPosition: double, yPosition: double, sprite: Sprite)
+    + scoreProperty(): IntegerProperty
+    + getLivesProperty(): IntegerProperty
+    + getScoreProperty(): IntegerProperty
+    + getBombsProperty(): IntegerProperty
+    + getScore(): int
+    + increaseScore(points: int): void
+    + livesProperty(): IntegerProperty
+    + getLives(): int
+    + decreaseLives(points: int): void
+    + collidedWith(other: IMovable): void
+    + explode(): void
+    + hitEnemy(): void
+    + move(delta: long): boolean
+}
+
+class Enemy extends AbstractMovable {
+    - {static} RANDOM: Random
+
+    + Enemy(game: BombermanGame, xPosition: double, yPosition: double, sprite: Sprite)
+    + collidedWith(other: IMovable): void
+    + explode(): void
+    + hitEnemy(): void
+    + move(delta: long): boolean
+    - changeDirectionRandomly(): void
+    - getRandomSpeed(): double
+}
+
 class GameMap {
     - height: int
     - width: int
