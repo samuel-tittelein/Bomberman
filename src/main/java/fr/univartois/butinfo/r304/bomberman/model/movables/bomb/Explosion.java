@@ -3,6 +3,7 @@ package fr.univartois.butinfo.r304.bomberman.model.movables.bomb;
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.movables.AbstractMovable;
+import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 
@@ -47,6 +48,16 @@ public class Explosion extends AbstractMovable {
         this.explosionBegin = System.currentTimeMillis();
     }
 
+    @Override
+    public void interactWithPlayer(Player player) {
+        player.decreaseLives(1);
+    }
+
+    @Override
+    public boolean isEnemy() {
+        return super.isEnemy();
+    }
+
     /**
      * Gère le déplacement de l'explosion. Si la durée de l'explosion dépasse
      * EXPLOSION_DURATION, elle est consommée (retirée du jeu).
@@ -82,10 +93,6 @@ public class Explosion extends AbstractMovable {
     public void explode() {
     }
 
-    /**
-     * Méthode appelée lorsque cette explosion touche un ennemi.
-     * Dans cette implémentation, ne fait rien. C'est fait de la classe {@link Ennemi}
-     */
     @Override
     public void hitEnemy() {
     }
