@@ -7,6 +7,8 @@ import fr.univartois.butinfo.r304.bomberman.model.movables.AbstractMovable;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 
+import java.util.Objects;
+
 public class Bomb extends AbstractMovable {
 
     public static final long BOMB_LIFESPAN = 2000; // 2 secondes
@@ -187,5 +189,19 @@ public class Bomb extends AbstractMovable {
         timeWhenDroped = System.currentTimeMillis();
         this.xDropPosition = xDropPosition;
         this.yDropPosition = yDropPosition;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        if (!super.equals(object)) return false;
+        Bomb bomb = (Bomb) object;
+        return timeWhenDroped == bomb.timeWhenDroped && xDropPosition == bomb.xDropPosition && yDropPosition == bomb.yDropPosition && explosionSize == bomb.explosionSize && Objects.equals(explosionSprite, bomb.explosionSprite);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), explosionSprite, timeWhenDroped, xDropPosition, yDropPosition, explosionSize);
     }
 }
