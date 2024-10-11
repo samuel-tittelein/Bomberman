@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
 import fr.univartois.butinfo.r304.bomberman.model.map.GameMap;
-import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.animation.AnimationTimer;
@@ -289,7 +289,11 @@ public final class BombermanGame {
      */
     public void dropBomb() {
         // TODO Retirer une bombe au joueur (s'il lui en reste).
-        // TODO Utilisez ensuite la méthode dropBomb(Bomb) pour la déposer.
+
+        // TODO changer la valeur de explosion size par la vraie valeure
+        int explosionSize = 1;
+        Bomb bomb = new Bomb(this, player.getX(), player.getY(), explosionSize);
+        dropBomb(bomb);
     }
 
     /**
@@ -298,9 +302,8 @@ public final class BombermanGame {
      *
      * @param bomb La bombe à déposer.
      */
-    public void dropBomb(IMovable bomb) {
-        // TODO Adapteez le type de bomb pour correspondre à votre implémentation.
-        // TODO Déposez ensuite la bombe à la position du joueur.
+    public void dropBomb(Bomb bomb) {
+        bomb.drop(player.getX(), player.getY());
     }
 
     /**
