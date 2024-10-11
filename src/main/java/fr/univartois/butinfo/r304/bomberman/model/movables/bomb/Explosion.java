@@ -43,8 +43,7 @@ public class Explosion extends AbstractMovable {
     public Explosion(BombermanGame game, double xPosition,
                      double yPosition){
 
-        super(game, xPosition, yPosition, spriteStore.getSprite("explosion"));
-        this.explosionBegin = System.currentTimeMillis();
+        this(game, xPosition, yPosition, spriteStore.getSprite("explosion"));
     }
 
     /**
@@ -84,7 +83,7 @@ public class Explosion extends AbstractMovable {
 
     /**
      * Méthode appelée lorsque cette explosion touche un ennemi.
-     * Dans cette implémentation, ne fait rien. C'est fait de la classe {@link Ennemi}
+     * Dans cette implémentation, ne fait rien. C'est fait dans la classe {@link Enemy}
      */
     @Override
     public void hitEnemy() {
