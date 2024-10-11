@@ -264,6 +264,50 @@ class Sprite {
     + getImage(): Image
     + draw(graphics: GraphicsContext, x: int, y: int): void
 }
+
+class Explosion {
+    + {static} EXPLOSION_DURATION: long
+    - explosionBegin: long
+    + {static} spriteStore: SpriteStore
+
+    + Explosion(game: BombermanGame, xPosition: double, yPosition: double, sprite: Sprite)
+    + Explosion(game: BombermanGame, xPosition: double, yPosition: double)
+    + move(delta: long): void
+    + collidedWith(other: IMovable): void
+    + explode(): void
+    + hitEnemy(): void
+    + equals(other: Object): boolean
+    + hashCode(): int
+}
+
+Explosion --|> AbstractMovable
+Explosion --> SpriteStore : << utilise >>
+
+class Bomb {
+    + {static} BOMB_LIFESPAN: long
+    + {static} spriteStore: SpriteStore
+    - explosionSprite: Sprite
+    - timeWhenDroped: long
+    - xDropPosition: int
+    - yDropPosition: int
+    - explosionSize: int
+
+    + Bomb(game: BombermanGame, xPosition: double, yPosition: double, sprite: Sprite, explosionSprite: Sprite)
+    + Bomb(game: BombermanGame, xPosition: double, yPosition: double, sprite: Sprite)
+    + Bomb(game: BombermanGame, xPosition: double, yPosition: double)
+    + move(delta: long): void
+    + collidedWith(other: IMovable): void
+    + explode(): void
+    + spreadExplosion(): void
+    + hitEnemy(): void
+    + drop(xDropPosition: int, yDropPosition: int): void
+    + equals(other: Object): boolean
+    + hashCode(): int
+}
+Bomb --|> AbstractMovable
+Bomb --> SpriteStore : << utilise >>
+Bomb --> Explosion : << utilise >>
+
 ```
 
 ## Tâches réalisées
@@ -276,6 +320,7 @@ class Sprite {
 | Intégration des ennemis dans la partie     |            |                                               |
 | Représentation du joueur                   |            |                                               |
 | Intégration du joueur dans la partie       |            |                                               |
-| Représentation des bombes et explosion     |            |                                               |
+| Représentation des bombes et explosion     | Oui        | Samuel TITTELEIN                          |
 | Intégration des bombes dans la partie      |            |                                               |
 | Création de la carte du jeu                |            |                                               |
+| Mise à jour du README.md                   | En cours   | Samuel TITTELEIN                                       |
