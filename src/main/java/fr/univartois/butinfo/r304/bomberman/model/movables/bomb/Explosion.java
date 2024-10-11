@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class Explosion extends AbstractMovable {
 
-    public static final double EXPLOSION_DURATION = 500; // 1/2 seconde
+    public static final long EXPLOSION_DURATION = 500; // 1/2 seconde
     private final long explosionBegin;
     public static SpriteStore spriteStore = new SpriteStore();
 
