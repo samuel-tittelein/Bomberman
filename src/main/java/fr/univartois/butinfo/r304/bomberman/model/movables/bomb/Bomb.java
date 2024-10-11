@@ -46,9 +46,7 @@ public class Bomb extends AbstractMovable {
      * </p>
      */
     public Bomb(BombermanGame game, double xPosition, double yPosition, Sprite explosionSprite, int explosionSize) {
-        super(game, xPosition, yPosition, spriteStore.getSprite("bomb"));
-        this.explosionSprite  = explosionSprite;
-        this.explosionSize = explosionSize;
+        this(game, xPosition, yPosition, explosionSprite,spriteStore.getSprite("bomb"), explosionSize);
     }
 
     /**
@@ -65,9 +63,7 @@ public class Bomb extends AbstractMovable {
      */
 
     public Bomb(BombermanGame game, double xPosition, double yPosition, int explosionSize) {
-        super(game, xPosition, yPosition, spriteStore.getSprite("bomb"));
-        this.explosionSprite  = spriteStore.getSprite("explosion");
-        this.explosionSize = explosionSize;
+        this(game, xPosition, yPosition, spriteStore.getSprite("bomb"), spriteStore.getSprite("explosion"), explosionSize);
     }
 
     /**
