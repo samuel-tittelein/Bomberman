@@ -9,7 +9,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.13'
 }
 
-// La version du langage Java utilisée dans le projet.
+// La version du langage Java. utilisée dans le projet.
 sourceCompatibility = '21'
 targetCompatibility = '21'
 

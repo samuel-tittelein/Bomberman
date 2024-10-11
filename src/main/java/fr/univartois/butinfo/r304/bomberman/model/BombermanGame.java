@@ -175,7 +175,7 @@ public final class BombermanGame {
             int mapWidthInCells = width / cellSize;
             int mapHeightInCells = height / cellSize;
 
-            GameMap map = new GameMap(mapWidthInCells, mapHeightInCells);
+            GameMap map = new GameMap(mapHeightInCells,mapWidthInCells);
             GameMapGenerator generator = new GameMapGenerator();
             return generator.fillMap(map);
 
