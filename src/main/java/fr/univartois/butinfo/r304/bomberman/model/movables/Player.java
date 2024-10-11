@@ -12,56 +12,35 @@ import javafx.collections.ObservableList;
 
 public class Player extends AbstractMovable {
 
-    // Déclaration de la liste observable de bombes
     private final ObservableList<Bomb> bombs = FXCollections.observableArrayList();
-
-    // Propriétés du joueur
     private IntegerProperty score;
     private IntegerProperty lives;
 
-    /**
-     * Crée une nouvelle instance de Player.
-     */
+    private long lastHitTime = 0; // Timestamp pour le cooldown de collision
+    private static final int COOLDOWN_TIME = 3000; // 3 secondes de cooldown (sinon il perd trop de pdv trop rapidement)
+
     public Player(BombermanGame game, double xPosition, double yPosition, Sprite sprite) {
         super(game, xPosition, yPosition, sprite);
-        this.score = new SimpleIntegerProperty(0); // Initialisation du score à 0
-        this.lives = new SimpleIntegerProperty(3); // Exemple d'initialisation des vies
+        this.score = new SimpleIntegerProperty(0);
+        this.lives = new SimpleIntegerProperty(3);
     }
 
-
-    // Accesseurs pour le score
     public IntegerProperty scoreProperty() {
         return score;
     }
 
-    /**
-     * Renvoie la propriété observable des vies du joueur.
-     *
-     * @return IntegerProperty des vies du joueur.
-     */
     public IntegerProperty getLivesProperty() {
         return lives;
     }
 
-    /**
-     * Renvoie la propriété observable du score du joueur.
-     *
-     * @return IntegerProperty du score du joueur.
-     */
     public IntegerProperty getScoreProperty() {
         return score;
     }
 
-    // Méthode pour ajouter des points au score
     public void addScore(int points) {
         this.score.set(this.score.get() + points);
     }
 
-    /**
-     * Renvoie la propriété observable des bombes disponibles du joueur.
-     *
-     * @return IntegerProperty des bombes du joueur.
-     */
     public IntegerProperty getBombsProperty() {
         return new SimpleIntegerProperty(bombs.size());
     }
@@ -73,7 +52,6 @@ public class Player extends AbstractMovable {
     public ObservableList<Bomb> getBombs() {
         return bombs;
     }
-
 
     public double getXPosition() {
         return getX();
@@ -91,7 +69,6 @@ public class Player extends AbstractMovable {
         this.score.set(this.score.get() + points);
     }
 
-    // Accesseurs pour les points de vie
     public IntegerProperty livesProperty() {
         return lives;
     }
@@ -102,28 +79,49 @@ public class Player extends AbstractMovable {
 
     public void decreaseLives(int points) {
         this.lives.set(this.lives.get() - points);
+        if (lives.get() <= 0) {
+            game.removeMovable(this); // Retirer le joueur du jeu si les vies sont à 0
+        }
     }
-
 
     @Override
     public void explode() {
-        // Si le joueur explose (par exemple à cause d'une bombe), il perd un point de vie
         decreaseLives(1);
         if (lives.get() <= 0) {
-            game.removeMovable(this);  // Si les points de vie atteignent 0, le joueur est retiré du jeu
+            game.removeMovable(this);
         }
     }
 
     @Override
     public void hitEnemy() {
-        // Gestion si le joueur touche un ennemi
-        decreaseLives(1);
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastHitTime >= COOLDOWN_TIME) {
+            decreaseLives(1);
+            lastHitTime = currentTime; // Mise à jour du dernier temps de collision
+        }
     }
+
+    public void dropBomb() {
+        if (!this.getBombs().isEmpty()) {
+            Bomb bomb = this.getBombs().removeFirst();
+            int playerX = (int) this.getXPosition();
+            int playerY = (int) this.getYPosition();
+            bomb.drop(playerX, playerY);
+            game.addMovable(bomb);
+        }
+    }
+
+    public void useBomb() {
+        if (!bombs.isEmpty()) {
+            bombs.removeLast(); // Retire la dernière bombe de la liste
+        }
+    }
+
 
 
     @Override
     public void interactWithPlayer(Player player) {
-
+        // Ne fait rien pour éviter les interactions fatales entre ennemis
     }
 
     @Override
@@ -133,14 +131,16 @@ public class Player extends AbstractMovable {
 
     @Override
     public boolean move(long delta) {
-        // Implémentation spécifique pour le déplacement du joueur, peut-être plus directe que celle de l'ennemi
         return super.move(delta);
     }
 
     @Override
     public void collidedWith(IMovable other) {
-        // Appelle la méthode d'interaction pour l'autre objet
-        other.interactWithPlayer(this);
+        // Si l'objet en collision est un ennemi, appliquer le cooldown de 3 secondes
+        if (other.isEnemy()) {
+            hitEnemy();
+        } else {
+            other.interactWithPlayer(this);
+        }
     }
-
 }

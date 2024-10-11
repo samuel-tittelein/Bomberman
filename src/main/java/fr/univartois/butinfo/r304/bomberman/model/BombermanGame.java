@@ -41,6 +41,8 @@ import javafx.animation.AnimationTimer;
  */
 public final class BombermanGame {
 
+
+
     // Constantes pour la position initiale du joueur. (à modifier potentiellement plus tard)
     public static final double PLAYER_INITIAL_X = 100.0;  // Position initiale en X
     public static final double PLAYER_INITIAL_Y = 100.0;  // Position initiale en Y
@@ -303,13 +305,21 @@ public final class BombermanGame {
      * cette bombe.
      */
     public void dropBomb() {
-        // TODO Retirer une bombe au joueur (s'il lui en reste).
+        if (!player.getBombs().isEmpty()) {
+            Bomb bomb = player.getBombs().removeFirst(); // Retirer la première bombe de la liste
+            int playerX = (int) player.getXPosition();
+            int playerY = (int) player.getYPosition();
 
-        // TODO changer la valeur de explosion size par la vraie valeure
-        int explosionSize = 1;
-        Bomb bomb = new Bomb(this, player.getX(), player.getY(), explosionSize);
-        dropBomb(bomb);
+            // Déposer la bombe à la position du joueur
+            bomb.drop(playerX, playerY);
+            addMovable(bomb); // Ajoute la bombe au jeu
+        }
     }
+
+
+
+
+
 
     /**
      * Dépose une bombe sur la tuile où se trouve le joueur, et programme l'explosion de
@@ -317,9 +327,6 @@ public final class BombermanGame {
      *
      * @param bomb La bombe à déposer.
      */
-    public void dropBomb(Bomb bomb) {
-        bomb.drop(player.getX(), player.getY());
-    }
 
     /**
      * Récupére la cellule correspondant à la position d'un objet mobile.

@@ -100,34 +100,31 @@ public final class GameMap {
     }
 
     /**
-     * Donne la cellule à la position donnée.
+     * Retourne la cellule à la position spécifiée.
      *
      * @param row La ligne de la cellule.
      * @param column La colonne de la cellule.
-     *
-     * @return La cellule à la position donnée.
-     *
+     * @return La cellule à la position spécifiée.
      * @throws IllegalArgumentException Si la position n'est pas sur la carte.
      */
     public Cell getAt(int row, int column) {
-        if ((row < 0) || (height <= row) || (column < 0) || (width <= column)) {
-            throw new IllegalArgumentException("Incorrect cell location!");
+        if (!isOnMap(row, column)) {
+            throw new IllegalArgumentException("La position de la cellule est incorrecte !");
         }
         return cells[row][column];
     }
 
     /**
-     * Modifie la cellule à la position donnée.
+     * Remplace la cellule à la position donnée par une nouvelle cellule.
      *
      * @param row La ligne de la cellule.
      * @param column La colonne de la cellule.
-     * @param cell La cellule à mettre à la position donnée.
-     *
+     * @param cell La nouvelle cellule à mettre à la position donnée.
      * @throws IllegalArgumentException Si la position n'est pas sur la carte.
      */
     public void setAt(int row, int column, Cell cell) {
-        if ((row < 0) || (height <= row) || (column < 0) || (width <= column)) {
-            throw new IllegalArgumentException("Incorrect cell location!");
+        if (!isOnMap(row, column)) {
+            throw new IllegalArgumentException("La position de la cellule est incorrecte !");
         }
         cells[row][column].replaceBy(cell);
     }
