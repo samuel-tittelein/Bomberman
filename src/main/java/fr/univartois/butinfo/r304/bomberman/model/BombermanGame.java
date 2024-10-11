@@ -23,6 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
 import fr.univartois.butinfo.r304.bomberman.model.map.GameMap;
+import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.animation.AnimationTimer;
@@ -35,6 +36,10 @@ import javafx.animation.AnimationTimer;
  * @version 0.1.0
  */
 public final class BombermanGame {
+
+    // Constantes pour la position initiale du joueur. (à modifier potentiellement plus tard)
+    public static final double PLAYER_INITIAL_X = 100.0;  // Position initiale en X
+    public static final double PLAYER_INITIAL_Y = 100.0;  // Position initiale en Y
 
     /**
      * Le génarateur de nombres aléatoires utilisé dans le jeu.
@@ -74,8 +79,7 @@ public final class BombermanGame {
     /**
      * Le personnage du joueur.
      */
-    // TODO Adaptez le type de cet attribut pour correspondre à votre implémentation.
-    private IMovable player;
+    private Player player;
 
     /**
      * Le nombre d'ennemis initialement dans le jeu.
@@ -186,19 +190,21 @@ public final class BombermanGame {
      */
     private void createMovables() {
         // On commence par enlever tous les éléments mobiles encore présents.
-        clearAllMovables();
+        clearAllMovables();Bi
 
-        // TODO On crée le joueur sur la carte.
-        player = null;
+        // Création et placement du joueur sur la carte.
+        Sprite playerSprite = spriteStore.getSprite("guy"); // Le joueur prend le skin "guy"
+        player = new Player(this, PLAYER_INITIAL_X, PLAYER_INITIAL_Y, playerSprite);
         movableObjects.add(player);
         spawnMovable(player);
 
-        // On ajoute les bombes initiales du joueur.
+        // Ajout des bombes initiales pour le joueur.
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
-            // TODO Créez une bombe et ajoutez-la au joueur.
+            Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), bombSprite);
+            player.addBomb(bomb);
         }
 
-        // On crée ensuite les ennemis sur la carte.
+        // Création des ennemis sur la carte.
         for (int i = 0; i < nbEnemies; i++) {
             Enemy enemy = new Enemy(this, 0, 0, spriteStore.getSprite("goblin"));
             enemy.setHorizontalSpeed(DEFAULT_SPEED);
@@ -207,16 +213,20 @@ public final class BombermanGame {
         }
     }
 
+
     /**
      * Initialise les statistiques de cette partie.
      */
     private void initStatistics() {
-        // TODO Lier les propriétés du joueur avec celles du contrôleur.
-        controller.bindLife(null);
-        controller.bindScore(null);
-        controller.bindBombs(null);
+        // Lier les propriétés du joueur avec celles du contrôleur.
+        controller.bindLife(player.getLivesProperty());
+        controller.bindScore(player.getScoreProperty());
+        controller.bindBombs(player.getBombsProperty());
+
+        // Mettre à jour le nombre d'ennemis restants.
         remainingEnemies = nbEnemies;
     }
+
 
     /**
      * Fait apparaître un objet pouvant se déplacer sur la carte du jeu.
@@ -362,15 +372,22 @@ public final class BombermanGame {
      * @param enemy L'ennemi qui a été tué.
      */
     public void enemyIsDead(IMovable enemy) {
-        // TODO Mettez à jour le score du joueur.
+        // Mettre à jour le score du joueur (exemple : +100 points par ennemi).
+        player.addScore(100);
+
+        // Décrémenter le nombre d'ennemis restants.
         remainingEnemies--;
+
+        // Retirer l'ennemi du jeu.
         removeMovable(enemy);
 
+        // Vérifier si tous les ennemis ont été tués.
         if (remainingEnemies == 0) {
-            // Tous les aliens ont été tués : la partie est terminée.
+            // Tous les ennemis ont été tués : la partie est terminée.
             gameOver("YOU WIN!");
         }
     }
+
 
     /**
      * Termine la partie lorsque le joueur est tué.
