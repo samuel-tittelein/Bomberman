@@ -16,17 +16,17 @@
 
 package fr.univartois.butinfo.r304.bomberman.model;
 
-import fr.univartois.butinfo.r304.bomberman.model.movables.Enemy;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
 import fr.univartois.butinfo.r304.bomberman.model.map.GameMap;
-import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
-import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
+import fr.univartois.butinfo.r304.bomberman.model.map.GameMapGenerator;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
+import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 import javafx.animation.AnimationTimer;
 
 /**
@@ -173,8 +173,17 @@ public final class BombermanGame {
      * @return La carte du jeu ayant été créée.
      */
     private GameMap createMap() {
-        // TODO Utilisez le générateur de cartes que vous avez écrit pour créer une carte.
-        return null;
+            int cellSize = spriteStore.getSpriteSize();
+
+            int mapWidthInCells = width / cellSize;
+            int mapHeightInCells = height / cellSize;
+
+            GameMap map = new GameMap(mapHeightInCells,mapWidthInCells);
+            GameMapGenerator generator = new GameMapGenerator();
+            return generator.fillMap(map);
+
+
+
     }
 
     /**
