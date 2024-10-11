@@ -3,6 +3,7 @@ package fr.univartois.butinfo.r304.bomberman.model.movables.bomb;
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.movables.AbstractMovable;
+import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 
 public class Explosion extends AbstractMovable {
 
-    public static final double EXPLOSION_DURATION = 500; // 1/2 seconde
+    public static final long EXPLOSION_DURATION = 500; // 1/2 seconde
     private final long explosionBegin;
     public static SpriteStore spriteStore = new SpriteStore();
 
@@ -43,8 +44,17 @@ public class Explosion extends AbstractMovable {
     public Explosion(BombermanGame game, double xPosition,
                      double yPosition){
 
-        super(game, xPosition, yPosition, spriteStore.getSprite("explosion"));
-        this.explosionBegin = System.currentTimeMillis();
+        this(game, xPosition, yPosition, spriteStore.getSprite("explosion"));
+    }
+
+    @Override
+    public void interactWithPlayer(Player player) {
+        player.decreaseLives(1);
+    }
+
+    @Override
+    public boolean isEnemy() {
+        return super.isEnemy();
     }
 
     /**
@@ -84,7 +94,7 @@ public class Explosion extends AbstractMovable {
 
     /**
      * Méthode appelée lorsque cette explosion touche un ennemi.
-     * Dans cette implémentation, ne fait rien. C'est fait de la classe {@link Ennemi}
+     * Dans cette implémentation, ne fait rien. C'est fait dans la classe {@link Enemy}
      */
     @Override
     public void hitEnemy() {

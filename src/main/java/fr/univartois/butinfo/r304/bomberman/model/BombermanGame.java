@@ -23,6 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
 import fr.univartois.butinfo.r304.bomberman.model.map.GameMap;
+import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
@@ -190,7 +191,7 @@ public final class BombermanGame {
      */
     private void createMovables() {
         // On commence par enlever tous les éléments mobiles encore présents.
-        clearAllMovables();Bi
+        clearAllMovables();
 
         // Création et placement du joueur sur la carte.
         Sprite playerSprite = spriteStore.getSprite("guy"); // Le joueur prend le skin "guy"
@@ -200,9 +201,10 @@ public final class BombermanGame {
 
         // Ajout des bombes initiales pour le joueur.
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
-            Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), bombSprite);
+            Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("explosion"), 3); // Taille de l'explosion fixée à 3
             player.addBomb(bomb);
         }
+
 
         // Création des ennemis sur la carte.
         for (int i = 0; i < nbEnemies; i++) {
@@ -212,6 +214,7 @@ public final class BombermanGame {
             spawnMovable(enemy);
         }
     }
+
 
 
     /**

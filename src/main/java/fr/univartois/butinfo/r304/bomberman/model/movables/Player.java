@@ -2,11 +2,18 @@ package fr.univartois.butinfo.r304.bomberman.model.movables;
 
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Explosion;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Player extends AbstractMovable {
+
+    // Déclaration de la liste observable de bombes
+    private final ObservableList<Bomb> bombs = FXCollections.observableArrayList();
 
     // Propriétés du joueur
     private IntegerProperty score;
@@ -14,17 +21,13 @@ public class Player extends AbstractMovable {
 
     /**
      * Crée une nouvelle instance de Player.
-     *
-     * @param game      Le jeu dans lequel le joueur évolue.
-     * @param xPosition La position en x initiale du joueur.
-     * @param yPosition La position en y initiale du joueur.
-     * @param sprite    L'instance de {@link Sprite} représentant le joueur.
      */
     public Player(BombermanGame game, double xPosition, double yPosition, Sprite sprite) {
         super(game, xPosition, yPosition, sprite);
-        this.score = new SimpleIntegerProperty(0);  // Score initialisé à 0
-        this.lives = new SimpleIntegerProperty(3);  // Points de vie initialisés à 3
+        this.score = new SimpleIntegerProperty(0); // Initialisation du score à 0
+        this.lives = new SimpleIntegerProperty(3); // Exemple d'initialisation des vies
     }
+
 
     // Accesseurs pour le score
     public IntegerProperty scoreProperty() {
@@ -49,15 +52,36 @@ public class Player extends AbstractMovable {
         return score;
     }
 
+    // Méthode pour ajouter des points au score
+    public void addScore(int points) {
+        this.score.set(this.score.get() + points);
+    }
+
     /**
      * Renvoie la propriété observable des bombes disponibles du joueur.
      *
      * @return IntegerProperty des bombes du joueur.
      */
     public IntegerProperty getBombsProperty() {
+        return new SimpleIntegerProperty(bombs.size());
+    }
+
+    public void addBomb(Bomb bomb) {
+        bombs.add(bomb);
+    }
+
+    public ObservableList<Bomb> getBombs() {
         return bombs;
     }
 
+
+    public double getXPosition() {
+        return getX();
+    }
+
+    public double getYPosition() {
+        return getY();
+    }
 
     public int getScore() {
         return score.get();
@@ -80,14 +104,6 @@ public class Player extends AbstractMovable {
         this.lives.set(this.lives.get() - points);
     }
 
-    // Gestion des collisions avec d'autres objets
-    @Override
-    public void collidedWith(IMovable other) {
-        // On appelle une méthode dédiée à l'objet autre
-        other.interactWithPlayer(this);
-    }
-
-
 
     @Override
     public void explode() {
@@ -104,9 +120,27 @@ public class Player extends AbstractMovable {
         decreaseLives(1);
     }
 
+
+    @Override
+    public void interactWithPlayer(Player player) {
+
+    }
+
+    @Override
+    public boolean isEnemy() {
+        return super.isEnemy();
+    }
+
     @Override
     public boolean move(long delta) {
         // Implémentation spécifique pour le déplacement du joueur, peut-être plus directe que celle de l'ennemi
         return super.move(delta);
     }
+
+    @Override
+    public void collidedWith(IMovable other) {
+        // Appelle la méthode d'interaction pour l'autre objet
+        other.interactWithPlayer(this);
+    }
+
 }
