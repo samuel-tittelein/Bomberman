@@ -16,6 +16,7 @@
 
 package fr.univartois.butinfo.r304.bomberman.model;
 
+import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -30,6 +31,17 @@ import javafx.beans.property.ObjectProperty;
  * @version 0.1.0
  */
 public interface IMovable {
+
+    void interactWithPlayer(Player player);
+
+
+    /**
+     * Vérifie si cet objet est un ennemi.
+     * @return true si l'objet est un ennemi, false sinon.
+     */
+    default boolean isEnemy() {
+        return false;
+    }
 
     /**
      * Donne la largeur de cet objet.

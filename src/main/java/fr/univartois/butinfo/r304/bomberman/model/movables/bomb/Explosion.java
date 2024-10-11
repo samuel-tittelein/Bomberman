@@ -3,6 +3,7 @@ package fr.univartois.butinfo.r304.bomberman.model.movables.bomb;
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.movables.AbstractMovable;
+import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 
@@ -44,6 +45,16 @@ public class Explosion extends AbstractMovable {
                      double yPosition){
 
         this(game, xPosition, yPosition, spriteStore.getSprite("explosion"));
+    }
+
+    @Override
+    public void interactWithPlayer(Player player) {
+        player.decreaseLives(1);
+    }
+
+    @Override
+    public boolean isEnemy() {
+        return super.isEnemy();
     }
 
     /**
