@@ -83,6 +83,7 @@ public class Bomb extends AbstractMovable {
     public void explode() {
         logger.info("bombe explosé à : " + currentTimeMillis() );
         game.addMovable(new Explosion(game, xDropPosition, yDropPosition));
+        logger.info("Bombe explose au coord : "+ xDropPosition + ", " + yDropPosition);
         for (int direction = 0; direction < 4; direction++) {
             spreadExplosion(direction, xDropPosition, yDropPosition, 0);
         }
