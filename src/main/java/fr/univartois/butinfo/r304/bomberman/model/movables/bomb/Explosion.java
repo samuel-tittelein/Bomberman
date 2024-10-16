@@ -13,7 +13,7 @@ public class Explosion extends AbstractMovable {
 
     public static final long EXPLOSION_DURATION = 500; // 1/2 seconde
     private final long explosionBegin;
-    public static SpriteStore spriteStore = new SpriteStore();
+    public static final SpriteStore spriteStore = new SpriteStore();
 
     /**
      * Crée une nouvelle instance de l'objet Explosion.
@@ -24,8 +24,7 @@ public class Explosion extends AbstractMovable {
      * @param sprite Le sprite représentant visuellement l'explosion.
      */
     public Explosion(BombermanGame game, double xPosition,
-                     double yPosition, Sprite sprite){
-
+                     double yPosition, Sprite sprite) {
         super(game, xPosition, yPosition, sprite);
         this.explosionBegin = System.currentTimeMillis();
     }
@@ -42,19 +41,13 @@ public class Explosion extends AbstractMovable {
      * </p>
      */
     public Explosion(BombermanGame game, double xPosition,
-                     double yPosition){
-
+                     double yPosition) {
         this(game, xPosition, yPosition, spriteStore.getSprite("explosion"));
     }
 
     @Override
     public void interactWithPlayer(Player player) {
         player.decreaseLives(1);
-    }
-
-    @Override
-    public boolean isEnemy() {
-        return super.isEnemy();
     }
 
     /**
@@ -94,7 +87,7 @@ public class Explosion extends AbstractMovable {
 
     /**
      * Méthode appelée lorsque cette explosion touche un ennemi.
-     * Dans cette implémentation, ne fait rien. C'est fait dans la classe {@link Enemy}
+     * Dans cette implémentation, ne fait rien. C'est fait dans la classe {@link fr.univartois.butinfo.r304.bomberman.model.movables.Enemy}
      */
     @Override
     public void hitEnemy() {
@@ -108,7 +101,6 @@ public class Explosion extends AbstractMovable {
      */
     @Override
     public boolean equals(Object o) {
-
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -126,8 +118,6 @@ public class Explosion extends AbstractMovable {
      */
     @Override
     public int hashCode() {
-
         return Objects.hash(super.hashCode(), explosionBegin);
     }
-
 }

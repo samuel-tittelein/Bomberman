@@ -15,9 +15,10 @@ public class Bomb extends AbstractMovable {
     public static final long BOMB_LIFESPAN = 4500; // Durée de vie de 4.5 secondes
     public static final long COOLDOWN_TIME = 4500;
     private static long lastDropTime = 0; // Temps de la dernière bombe déposée// Cooldown de 5 secondes
-    public static SpriteStore spriteStore = new SpriteStore();
+    public static final SpriteStore spriteStore = new SpriteStore();
     private final Sprite explosionSprite;
-    private int xDropPosition, yDropPosition;
+    private int xDropPosition;
+    private int yDropPosition;
     private final int explosionSize;
     private long timeWhenDropped;
 
@@ -36,7 +37,7 @@ public class Bomb extends AbstractMovable {
         super(game, xPosition, yPosition, sprite);
         this.explosionSprite = explosionSprite;
         this.explosionSize = explosionSize;
-        this.lastDropTime = 0;
+        lastDropTime = 0;
     }
 
     /**
@@ -157,6 +158,9 @@ public class Bomb extends AbstractMovable {
                 break;
             case 3: // haut
                 y -= 1;
+                break;
+            default:
+              break;
         }
 
         // Vérifie si on dépasse les limites de la carte.
@@ -203,8 +207,8 @@ public class Bomb extends AbstractMovable {
             timeWhenDropped = currentTime;
             this.xDropPosition = xDropPosition;
             this.yDropPosition = yDropPosition;
-            this.xPosition.set((double) xDropPosition);
-            this.yPosition.set((double) yDropPosition);
+            this.xPosition.set(xDropPosition);
+            this.yPosition.set(yDropPosition);
             game.addMovable(this);
             lastDropTime = currentTime;
         }

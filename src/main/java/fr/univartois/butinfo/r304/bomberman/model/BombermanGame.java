@@ -1,6 +1,6 @@
 /**
  * Ce logiciel est distribué à des fins éducatives.
- *
+ * <p>
  * Il est fourni "tel quel", sans garantie d’aucune sorte, explicite
  * ou implicite, notamment sans garantie de qualité marchande, d’adéquation
  * à un usage particulier et d’absence de contrefaçon.
@@ -9,7 +9,7 @@
  * soit dans le cadre d’un contrat, d’un délit ou autre, en provenance de,
  * consécutif à ou en relation avec le logiciel ou son utilisation, ou avec
  * d’autres éléments du logiciel.
- *
+ * <p>
  * (c) 2022-2024 Romain Wallon - Université d'Artois.
  * Tous droits réservés.
  */
@@ -90,7 +90,7 @@ public final class BombermanGame {
     /**
      * Le nombre d'ennemis initialement dans le jeu.
      */
-    private int nbEnemies;
+    private final int nbEnemies;
 
     /**
      * Le nombre d'ennemis restant dans le jeu.
@@ -178,17 +178,14 @@ public final class BombermanGame {
      * @return La carte du jeu ayant été créée.
      */
     private GameMap createMap() {
-            int cellSize = spriteStore.getSpriteSize();
+        int cellSize = spriteStore.getSpriteSize();
 
-            int mapWidthInCells = width / cellSize;
-            int mapHeightInCells = height / cellSize;
+        int mapWidthInCells = width / cellSize;
+        int mapHeightInCells = height / cellSize;
 
-            GameMap map = new GameMap(mapHeightInCells,mapWidthInCells);
-            GameMapGenerator generator = new GameMapGenerator();
-            return generator.fillMap(map);
-
-
-
+        GameMap map = new GameMap(mapHeightInCells,mapWidthInCells);
+        GameMapGenerator generator = new GameMapGenerator();
+        return generator.fillMap(map);
     }
 
     /**
@@ -315,18 +312,6 @@ public final class BombermanGame {
             addMovable(bomb); // Ajoute la bombe au jeu
         }
     }
-
-
-
-
-
-
-    /**
-     * Dépose une bombe sur la tuile où se trouve le joueur, et programme l'explosion de
-     * cette bombe.
-     *
-     * @param bomb La bombe à déposer.
-     */
 
     /**
      * Récupére la cellule correspondant à la position d'un objet mobile.
