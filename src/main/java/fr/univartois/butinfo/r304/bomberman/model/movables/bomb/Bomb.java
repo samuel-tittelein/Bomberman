@@ -9,36 +9,22 @@ import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 
 import java.util.Objects;
+import java.util.logging.Logger;
+
+import static java.lang.System.currentTimeMillis;
 
 public class Bomb extends AbstractMovable {
 
     public static final long BOMB_LIFESPAN = 4500; // Durée de vie de 4.5 secondes
     //public static final long COOLDOWN_TIME = 4500;
-    private static long lastDropTime = 0; // Temps de la dernière bombe déposée// Cooldown de 5 secondes
+    //private static long lastDropTime = 0; // Temps de la dernière bombe déposée// Cooldown de 5 secondes
     public static final SpriteStore spriteStore = new SpriteStore();
-    private final Sprite explosionSprite;
     private int xDropPosition;
     private int yDropPosition;
     private final int explosionSize;
     private long timeWhenDropped;
+    Logger logger = Logger.getLogger("tkt.log");
 
-
-    /**
-     * Crée une nouvelle bombe avec un sprite spécifique et une taille d'explosion définie.
-     *
-     * @param game Le jeu Bomberman auquel cette bombe est liée.
-     * @param xPosition La position en X où la bombe est placée.
-     * @param yPosition La position en Y où la bombe est placée.
-     * @param sprite Le sprite représentant visuellement la bombe.
-     * @param explosionSprite Le sprite de l'explosion qui sera affiché après l'explosion.
-     * @param explosionSize La taille de l'explosion (en nombre de cases).
-     */
-    public Bomb(BombermanGame game, double xPosition, double yPosition, Sprite sprite, Sprite explosionSprite, int explosionSize) {
-        super(game, xPosition, yPosition, sprite);
-        this.explosionSprite = explosionSprite;
-        this.explosionSize = explosionSize;
-        lastDropTime = 0;
-    }
 
     /**
      * Crée une nouvelle bombe avec un sprite spécifique et une taille d'explosion définie.
@@ -54,24 +40,8 @@ public class Bomb extends AbstractMovable {
      * </p>
      */
     public Bomb(BombermanGame game, double xPosition, double yPosition, Sprite explosionSprite, int explosionSize) {
-        this(game, xPosition, yPosition, explosionSprite,spriteStore.getSprite("bomb"), explosionSize);
-    }
-
-    /**
-     * Crée une nouvelle bombe avec un sprite spécifique et une taille d'explosion définie.
-     *
-     * @param game Le jeu Bomberman auquel cette bombe est liée.
-     * @param xPosition La position en X où la bombe est placée.
-     * @param yPosition La position en Y où la bombe est placée.
-     * @param explosionSize La taille de l'explosion (en nombre de cases).
-     * <p>
-     * Les attributs sprite et explosionSprite sont par défaut initialisé par {@link SpriteStore}
-     * avec pour sprite les sprites "bomb" et "explosion" respectivement.
-     * </p>
-     */
-
-    public Bomb(BombermanGame game, double xPosition, double yPosition, int explosionSize) {
-        this(game, xPosition, yPosition, spriteStore.getSprite("bomb"), spriteStore.getSprite("explosion"), explosionSize);
+        super(game, xPosition, yPosition, explosionSprite);
+        this.explosionSize = explosionSize;
     }
 
 
@@ -85,8 +55,9 @@ public class Bomb extends AbstractMovable {
     @Override
     public boolean move(long delta) {
         // Vérifie si le temps écoulé depuis le dépôt de la bombe dépasse BOMB_LIFESPAN
-        long elapsedTime = System.currentTimeMillis() - timeWhenDropped;
-        if (elapsedTime >= BOMB_LIFESPAN) {
+        long elapsedTime = currentTimeMillis() - timeWhenDropped;
+        if (elapsedTime > BOMB_LIFESPAN) {
+            logger.info("ms , elapsedTime : " + elapsedTime + "ms");
             explode(); // Déclenche l'explosion si le temps est écoulé
         }
         return true; // La bombe ne se déplace pas, donc toujours vrai
@@ -110,7 +81,8 @@ public class Bomb extends AbstractMovable {
      */
     @Override
     public void explode() {
-        game.addMovable(new Explosion(game, xDropPosition, yDropPosition, explosionSprite));
+        logger.info("bombe explosé à : " + currentTimeMillis() );
+        game.addMovable(new Explosion(game, xDropPosition, yDropPosition));
         for (int direction = 0; direction < 4; direction++) {
             spreadExplosion(direction, xDropPosition, yDropPosition, 0);
         }
@@ -164,7 +136,7 @@ public class Bomb extends AbstractMovable {
         }
 
         // Ajout de l'explosion dans la cellule.
-        game.addMovable(new Explosion(game, x, y, explosionSprite));
+        game.addMovable(new Explosion(game, x, y));
 
         // Vérification de la cellule actuelle pour voir s'il y a un mur.
         Cell currentCell = game.getCellAt(x, y);
@@ -188,24 +160,16 @@ public class Bomb extends AbstractMovable {
 
     }
 
-    /**
-     * Dépose la bombe à la position spécifiée (xDropPosition, yDropPosition)
-     * et enregistre le temps exact de dépôt.
-     *
-     * @param xDropPosition La position X où la bombe est déposée.
-     * @param yDropPosition La position Y où la bombe est déposée.
-     * @return true si la bombe a été déposée, false sinon
-     */
+
     public void drop(Cell cell) {
-        long currentTime = System.currentTimeMillis();
+        long currentTime = currentTimeMillis();
         //if (currentTime - lastDropTime >= COOLDOWN_TIME) {
-            timeWhenDropped = currentTime;
-            xDropPosition = cell.getColumn();
-            yDropPosition = cell.getColumn();
-            this.xPosition.set(xDropPosition);
-            this.yPosition.set(yDropPosition);
-            game.addMovable(this);
-            lastDropTime = currentTime;
+        timeWhenDropped = currentTime;
+        logger.info("bombe larguée à : " + timeWhenDropped );
+        xDropPosition = cell.getColumn();
+        yDropPosition = cell.getColumn();
+        game.addMovable(this);
+            //lastDropTime = currentTime;
         //}
     }
 
@@ -216,11 +180,11 @@ public class Bomb extends AbstractMovable {
         if (object == null || getClass() != object.getClass()) return false;
         if (!super.equals(object)) return false;
         Bomb bomb = (Bomb) object;
-        return timeWhenDropped == bomb.timeWhenDropped && xDropPosition == bomb.xDropPosition && yDropPosition == bomb.yDropPosition && explosionSize == bomb.explosionSize && Objects.equals(explosionSprite, bomb.explosionSprite);
+        return timeWhenDropped == bomb.timeWhenDropped && xDropPosition == bomb.xDropPosition && yDropPosition == bomb.yDropPosition && explosionSize == bomb.explosionSize;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), explosionSprite, timeWhenDropped, xDropPosition, yDropPosition, explosionSize);
+        return Objects.hash(super.hashCode(), timeWhenDropped, xDropPosition, yDropPosition, explosionSize);
     }
 }
