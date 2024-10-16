@@ -357,13 +357,14 @@ Bomb --> Explosion : << utilise >>
 
 ### TP n°3
 
-| Fonctionnalité                             | Terminée ? | Auteur(s)                                     |
-| ------------------------------------------ | ---------- | --------------------------------------------- |
-| Représentation des ennemis                 |            |                                               |
-| Intégration des ennemis dans la partie     |            |                                               |
-| Représentation du joueur                   |            |                                               |
-| Intégration du joueur dans la partie       |            |                                               |
-| Représentation des bombes et explosion     | Oui        | Samuel TITTELEIN                          |
-| Intégration des bombes dans la partie      |            |                                               |
-| Création de la carte du jeu                |            |                                               |
-| Mise à jour du README.md                   | En cours   | Samuel TITTELEIN                                       |
+| Fonctionnalité                         | Terminée ? | Auteur(s)                         |
+|----------------------------------------|------------|-----------------------------------|
+| Représentation des ennemis             | Oui        | Clément Goustiaux                 |
+| Intégration des ennemis dans la partie | Oui        | Clément Goustiaux                 |
+| Représentation du joueur               | Oui        | Rousseau Rayane                   |
+| Intégration du joueur dans la partie   | Oui        | Rousseau Rayane                   |
+| Représentation des bombes et explosion | Oui        | Samuel TITTELEIN                  |
+| Intégration des bombes dans la partie  | Oui        | Etienne Focquet, Samuel Tittelein |
+| Création de la carte du jeu            | Oui        | Etienne Focquet                   |
+| Fixation des bugs                      | Oui        | (tous le groupe)                  |
+| Mise à jour du README.md               | Oui        | Samuel TITTELEIN, Rousseau Rayane |

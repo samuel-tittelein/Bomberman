@@ -96,6 +96,7 @@ public class Player extends AbstractMovable {
     public void hitEnemy() {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastHitTime >= COOLDOWN_TIME) {
+            // TODO à sortir de player
             decreaseLives(1);
             lastHitTime = currentTime; // Mise à jour du dernier temps de collision
         }
