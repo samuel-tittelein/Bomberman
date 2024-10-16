@@ -22,8 +22,7 @@ public class Enemy extends AbstractMovable {
    * @param yPosition La position en y initiale de l'objet.
    * @param sprite    L'instance de {@link Sprite} représentant l'objet.
    */
-  public Enemy(BombermanGame game, double xPosition,
-      double yPosition, Sprite sprite) {
+  public Enemy(BombermanGame game, double xPosition, double yPosition, Sprite sprite) {
     super(game, xPosition, yPosition, sprite);
   }
 
@@ -34,7 +33,7 @@ public class Enemy extends AbstractMovable {
 
   @Override
   public void explode() {
-    game.removeMovable(this);
+    game.enemyIsDead(this);
   }
 
   @Override
