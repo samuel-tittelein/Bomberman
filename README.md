@@ -245,6 +245,17 @@ class GameMap {
 }
 GameMap *-- "*" Cell
 
+class GameMapGenerator {
+    - ss: SpriteStore
+    - wall: Cell
+    - lawn: Cell
+
+    + fillMap(map: GameMap): GameMap
+}
+GameMapGenerator *-- "1" SpriteStore
+GameMapGenerator *-- "1" Cell
+GameMapGenerator *-- "1" GameMap
+
 class Cell {
     - row: int
     - column: int
