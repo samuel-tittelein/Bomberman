@@ -85,7 +85,11 @@ public class Player extends AbstractMovable {
 
     @Override
     public void explode() {
-        decreaseLives(1);
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastHitTime >= COOLDOWN_TIME) {
+            decreaseLives(1);
+            lastHitTime = currentTime; // Mise à jour du dernier temps de collision
+        }
     }
 
     @Override

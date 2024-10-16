@@ -7,6 +7,9 @@ import fr.univartois.butinfo.r304.bomberman.model.movables.AbstractMovable;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -19,8 +22,6 @@ public class Bomb extends AbstractMovable {
     //public static final long COOLDOWN_TIME = 4500;
     //private static long lastDropTime = 0; // Temps de la dernière bombe déposée// Cooldown de 5 secondes
     public static final SpriteStore spriteStore = new SpriteStore();
-    private int xDropPosition;
-    private int yDropPosition;
     private final int explosionSize;
     private long timeWhenDropped;
     Logger logger = Logger.getLogger("tkt.log");
@@ -82,10 +83,10 @@ public class Bomb extends AbstractMovable {
     @Override
     public void explode() {
         logger.info("bombe explosé à : " + currentTimeMillis() );
-        game.addMovable(new Explosion(game, xDropPosition, yDropPosition));
-        logger.info("Bombe explose au coord : "+ xDropPosition + ", " + yDropPosition);
+        game.addMovable(new Explosion(game, getX(), getY()));
+        logger.info("Bombe explose au coord : "+ getX() + ", " + getY());
         for (int direction = 0; direction < 4; direction++) {
-            spreadExplosion(direction, xDropPosition, yDropPosition, 0);
+            spreadExplosion(direction, getX(), getY(), 0, getHeight());
         }
         game.removeMovable(this);
     }
@@ -103,7 +104,7 @@ public class Bomb extends AbstractMovable {
      * l'implémentation des different types d'explosion.
      * </p>
      */
-    public void spreadExplosion(int direction, int x, int y, int iteration) {
+    public void spreadExplosion(int direction, int x, int y, int iteration, int cellHeight) {
         int limitMaxX = game.getWidth() - getWidth();
         int limitMaxY = game.getHeight() - getHeight();
 
@@ -116,16 +117,16 @@ public class Bomb extends AbstractMovable {
         // Mise à jour des coordonnées selon la direction
         switch (direction) {
             case 0: // droite
-                x += 1;
+                x += cellHeight;
                 break;
             case 1: // gauche
-                x -= 1;
+                x -= cellHeight;
                 break;
             case 2: // bas
-                y += 1;
+                y += cellHeight;
                 break;
             case 3: // haut
-                y -= 1;
+                y -= cellHeight;
                 break;
             default:
               break;
@@ -148,7 +149,7 @@ public class Bomb extends AbstractMovable {
         }
 
         // Si aucun mur n'est rencontré, continue à propager l'explosion dans la même direction.
-        spreadExplosion(direction, x, y, iteration);
+        spreadExplosion(direction, x, y, iteration, cellHeight);
     }
 
 
@@ -163,12 +164,19 @@ public class Bomb extends AbstractMovable {
 
 
     public void drop(Cell cell) {
+
+
         long currentTime = currentTimeMillis();
         //if (currentTime - lastDropTime >= COOLDOWN_TIME) {
         timeWhenDropped = currentTime;
         logger.info("bombe larguée à : " + timeWhenDropped );
-        xDropPosition = cell.getColumn();
-        yDropPosition = cell.getColumn();
+
+        int x = cell.getColumn() * cell.getWidth();
+        int y = cell.getRow() * cell.getHeight();
+
+        setX(x);
+        setY(y);
+
         game.addMovable(this);
             //lastDropTime = currentTime;
         //}
@@ -181,11 +189,11 @@ public class Bomb extends AbstractMovable {
         if (object == null || getClass() != object.getClass()) return false;
         if (!super.equals(object)) return false;
         Bomb bomb = (Bomb) object;
-        return timeWhenDropped == bomb.timeWhenDropped && xDropPosition == bomb.xDropPosition && yDropPosition == bomb.yDropPosition && explosionSize == bomb.explosionSize;
+        return timeWhenDropped == bomb.timeWhenDropped && explosionSize == bomb.explosionSize;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), timeWhenDropped, xDropPosition, yDropPosition, explosionSize);
+        return Objects.hash(super.hashCode(), timeWhenDropped, explosionSize);
     }
 }
