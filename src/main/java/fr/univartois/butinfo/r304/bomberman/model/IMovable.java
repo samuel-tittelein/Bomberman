@@ -32,9 +32,6 @@ import javafx.beans.property.ObjectProperty;
  */
 public interface IMovable {
 
-    void interactWithPlayer(Player player);
-
-
     /**
      * Vérifie si cet objet est un ennemi.
      * @return true si l'objet est un ennemi, false sinon.

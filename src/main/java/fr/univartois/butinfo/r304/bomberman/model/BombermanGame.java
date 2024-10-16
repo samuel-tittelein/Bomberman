@@ -1,6 +1,6 @@
 /**
  * Ce logiciel est distribué à des fins éducatives.
- *
+ * <p>
  * Il est fourni "tel quel", sans garantie d’aucune sorte, explicite
  * ou implicite, notamment sans garantie de qualité marchande, d’adéquation
  * à un usage particulier et d’absence de contrefaçon.
@@ -9,24 +9,27 @@
  * soit dans le cadre d’un contrat, d’un délit ou autre, en provenance de,
  * consécutif à ou en relation avec le logiciel ou son utilisation, ou avec
  * d’autres éléments du logiciel.
- *
+ * <p>
  * (c) 2022-2024 Romain Wallon - Université d'Artois.
  * Tous droits réservés.
  */
 
 package fr.univartois.butinfo.r304.bomberman.model;
 
-import fr.univartois.butinfo.r304.bomberman.model.movables.Enemy;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
 import fr.univartois.butinfo.r304.bomberman.model.map.GameMap;
+import fr.univartois.butinfo.r304.bomberman.model.map.GameMapGenerator;
+import fr.univartois.butinfo.r304.bomberman.model.movables.Enemy;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
+import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 import javafx.animation.AnimationTimer;
 
 /**
@@ -37,6 +40,8 @@ import javafx.animation.AnimationTimer;
  * @version 0.1.0
  */
 public final class BombermanGame {
+
+
 
     // Constantes pour la position initiale du joueur. (à modifier potentiellement plus tard)
     public static final double PLAYER_INITIAL_X = 100.0;  // Position initiale en X
@@ -85,7 +90,7 @@ public final class BombermanGame {
     /**
      * Le nombre d'ennemis initialement dans le jeu.
      */
-    private int nbEnemies;
+    private final int nbEnemies;
 
     /**
      * Le nombre d'ennemis restant dans le jeu.
@@ -173,8 +178,14 @@ public final class BombermanGame {
      * @return La carte du jeu ayant été créée.
      */
     private GameMap createMap() {
-        // TODO Utilisez le générateur de cartes que vous avez écrit pour créer une carte.
-        return null;
+        int cellSize = spriteStore.getSpriteSize();
+
+        int mapWidthInCells = width / cellSize;
+        int mapHeightInCells = height / cellSize;
+
+        GameMap map = new GameMap(mapHeightInCells,mapWidthInCells);
+        GameMapGenerator generator = new GameMapGenerator();
+        return generator.fillMap(map);
     }
 
     /**
@@ -201,7 +212,7 @@ public final class BombermanGame {
 
         // Ajout des bombes initiales pour le joueur.
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
-            Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("explosion"), 3); // Taille de l'explosion fixée à 3
+            Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3); // Taille de l'explosion fixée à 3
             player.addBomb(bomb);
         }
 
@@ -218,7 +229,7 @@ public final class BombermanGame {
 
 
     /**
-     * Initialise les statistiques de cette partie.
+     * Initialie les statistiques de cette partie.
      */
     private void initStatistics() {
         // Lier les propriétés du joueur avec celles du contrôleur.
@@ -291,12 +302,9 @@ public final class BombermanGame {
      * cette bombe.
      */
     public void dropBomb() {
-        // TODO Retirer une bombe au joueur (s'il lui en reste).
-
-        // TODO changer la valeur de explosion size par la vraie valeure
-        int explosionSize = 1;
-        Bomb bomb = new Bomb(this, player.getX(), player.getY(), explosionSize);
-        dropBomb(bomb);
+        if (!player.getBombs().isEmpty()) {
+            dropBomb(player.getBombs().removeFirst());
+        }
     }
 
     /**
@@ -306,8 +314,9 @@ public final class BombermanGame {
      * @param bomb La bombe à déposer.
      */
     public void dropBomb(Bomb bomb) {
-        bomb.drop(player.getX(), player.getY());
+        bomb.drop(getCellOf(player));
     }
+
 
     /**
      * Récupére la cellule correspondant à la position d'un objet mobile.

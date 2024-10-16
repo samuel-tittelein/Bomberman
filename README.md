@@ -197,6 +197,38 @@ abstract class AbstractMovable implements IMovable {
 AbstractMovable *-- "1" BombermanGame
 AbstractMovable o-- "1" Sprite
 
+class Player extends AbstractMovable {
+    - score: IntegerProperty
+    - lives: IntegerProperty
+
+    + Player(game: BombermanGame, xPosition: double, yPosition: double, sprite: Sprite)
+    + scoreProperty(): IntegerProperty
+    + getLivesProperty(): IntegerProperty
+    + getScoreProperty(): IntegerProperty
+    + getBombsProperty(): IntegerProperty
+    + getScore(): int
+    + increaseScore(points: int): void
+    + livesProperty(): IntegerProperty
+    + getLives(): int
+    + decreaseLives(points: int): void
+    + collidedWith(other: IMovable): void
+    + explode(): void
+    + hitEnemy(): void
+    + move(delta: long): boolean
+}
+
+class Enemy extends AbstractMovable {
+    - {static} RANDOM: Random
+
+    + Enemy(game: BombermanGame, xPosition: double, yPosition: double, sprite: Sprite)
+    + collidedWith(other: IMovable): void
+    + explode(): void
+    + hitEnemy(): void
+    + move(delta: long): boolean
+    - changeDirectionRandomly(): void
+    - getRandomSpeed(): double
+}
+
 class GameMap {
     - height: int
     - width: int
@@ -212,6 +244,17 @@ class GameMap {
     + getEmptyCells(): List<Cell>
 }
 GameMap *-- "*" Cell
+
+class GameMapGenerator {
+    - ss: SpriteStore
+    - wall: Cell
+    - lawn: Cell
+
+    + fillMap(map: GameMap): GameMap
+}
+GameMapGenerator *-- "1" SpriteStore
+GameMapGenerator *-- "1" Cell
+GameMapGenerator *-- "1" GameMap
 
 class Cell {
     - row: int
@@ -314,13 +357,14 @@ Bomb --> Explosion : << utilise >>
 
 ### TP n°3
 
-| Fonctionnalité                             | Terminée ? | Auteur(s)                                     |
-| ------------------------------------------ | ---------- | --------------------------------------------- |
-| Représentation des ennemis                 |            |                                               |
-| Intégration des ennemis dans la partie     |            |                                               |
-| Représentation du joueur                   |            |                                               |
-| Intégration du joueur dans la partie       |            |                                               |
-| Représentation des bombes et explosion     | Oui        | Samuel TITTELEIN                          |
-| Intégration des bombes dans la partie      |            |                                               |
-| Création de la carte du jeu                |            |                                               |
-| Mise à jour du README.md                   | En cours   | Samuel TITTELEIN                                       |
+| Fonctionnalité                         | Terminée ? | Auteur(s)                         |
+|----------------------------------------|------------|-----------------------------------|
+| Représentation des ennemis             | Oui        | Clément Goustiaux                 |
+| Intégration des ennemis dans la partie | Oui        | Clément Goustiaux                 |
+| Représentation du joueur               | Oui        | Rousseau Rayane                   |
+| Intégration du joueur dans la partie   | Oui        | Rousseau Rayane                   |
+| Représentation des bombes et explosion | Oui        | Samuel TITTELEIN                  |
+| Intégration des bombes dans la partie  | Oui        | Etienne Focquet, Samuel Tittelein |
+| Création de la carte du jeu            | Oui        | Etienne Focquet                   |
+| Fixation des bugs                      | Oui        | (tous le groupe)                  |
+| Mise à jour du README.md               | Oui        | Samuel TITTELEIN, Rousseau Rayane |
