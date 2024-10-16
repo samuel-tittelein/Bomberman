@@ -38,9 +38,7 @@ public class Enemy extends AbstractMovable {
   }
 
   @Override
-  public void hitEnemy() {
-    explode();
-  }
+  public void hitEnemy() {}
 
   @Override
   public boolean move(long delta) {
