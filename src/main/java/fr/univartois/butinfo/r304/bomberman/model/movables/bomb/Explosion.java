@@ -55,7 +55,7 @@ public class Explosion extends AbstractMovable {
     @Override
     public boolean move(long delta) {
         if(System.currentTimeMillis() - explosionBegin > EXPLOSION_DURATION ) {
-            this.consume();
+            game.removeMovable(this);
         }
         return true;
     }
