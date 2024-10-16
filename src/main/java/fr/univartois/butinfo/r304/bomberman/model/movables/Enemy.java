@@ -14,11 +14,6 @@ public class Enemy extends AbstractMovable {
     return true;
   }
 
-  @Override
-  public void interactWithPlayer(Player player) {
-    player.decreaseLives(1); // Example: Decrease player's lives by 1
-  }
-
   /**
    * Crée une nouvelle instance d'Enemy.
    *

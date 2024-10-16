@@ -196,12 +196,12 @@ public class Bomb extends AbstractMovable {
      * @param yDropPosition La position Y où la bombe est déposée.
      * @return true si la bombe a été déposée, false sinon
      */
-    public void drop(int xDropPosition, int yDropPosition) {
+    public void drop(Cell cell) {
         long currentTime = System.currentTimeMillis();
         //if (currentTime - lastDropTime >= COOLDOWN_TIME) {
             timeWhenDropped = currentTime;
-            this.xDropPosition = xDropPosition;
-            this.yDropPosition = yDropPosition;
+            xDropPosition = cell.getColumn();
+            yDropPosition = cell.getColumn();
             this.xPosition.set(xDropPosition);
             this.yPosition.set(yDropPosition);
             game.addMovable(this);

@@ -304,11 +304,10 @@ public final class BombermanGame {
     public void dropBomb() {
         if (!player.getBombs().isEmpty()) {
             Bomb bomb = player.getBombs().removeFirst(); // Retirer la première bombe de la liste
-            int playerX = (int) player.getXPosition();
-            int playerY = (int) player.getYPosition();
+
 
             // Déposer la bombe à la position du joueur
-            bomb.drop(playerX, playerY);
+            bomb.drop(getCellOf(player));
             addMovable(bomb); // Ajoute la bombe au jeu
         }
     }

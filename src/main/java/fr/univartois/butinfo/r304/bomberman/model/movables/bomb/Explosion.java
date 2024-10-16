@@ -45,11 +45,6 @@ public class Explosion extends AbstractMovable {
         this(game, xPosition, yPosition, spriteStore.getSprite("explosion"));
     }
 
-    @Override
-    public void interactWithPlayer(Player player) {
-        player.decreaseLives(1);
-    }
-
     /**
      * Gère le déplacement de l'explosion. Si la durée de l'explosion dépasse
      * EXPLOSION_DURATION, elle est consommée (retirée du jeu).

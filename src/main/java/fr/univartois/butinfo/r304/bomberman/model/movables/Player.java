@@ -88,7 +88,7 @@ public class Player extends AbstractMovable {
     public void explode() {
         decreaseLives(1);
         if (lives.get() <= 0) {
-            game.removeMovable(this);
+            die();
         }
     }
 
@@ -101,20 +101,8 @@ public class Player extends AbstractMovable {
         }
     }
 
-    public void dropBomb() {
-        if (!this.getBombs().isEmpty()) {
-            Bomb bomb = this.getBombs().removeFirst();
-            int playerX = (int) this.getXPosition();
-            int playerY = (int) this.getYPosition();
-            bomb.drop(playerX, playerY);
-            game.addMovable(bomb);
-        }
-    }
-
-    public void useBomb() {
-        if (!bombs.isEmpty()) {
-            bombs.removeLast(); // Retire la dernière bombe de la liste
-        }
+    public void die() {
+        game.removeMovable(this);
     }
 
     @Override
