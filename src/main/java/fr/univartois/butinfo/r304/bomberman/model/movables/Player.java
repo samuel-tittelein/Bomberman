@@ -117,13 +117,6 @@ public class Player extends AbstractMovable {
         }
     }
 
-
-
-    @Override
-    public void interactWithPlayer(Player player) {
-        // Ne fait rien pour éviter les interactions fatales entre ennemis
-    }
-
     @Override
     public boolean isEnemy() {
         return super.isEnemy();
@@ -136,11 +129,6 @@ public class Player extends AbstractMovable {
 
     @Override
     public void collidedWith(IMovable other) {
-        // Si l'objet en collision est un ennemi, appliquer le cooldown de 3 secondes
-        if (other.isEnemy()) {
-            hitEnemy();
-        } else {
-            other.interactWithPlayer(this);
-        }
+
     }
 }

@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Bomb extends AbstractMovable {
 
     public static final long BOMB_LIFESPAN = 4500; // Durée de vie de 4.5 secondes
-    public static final long COOLDOWN_TIME = 4500;
+    //public static final long COOLDOWN_TIME = 4500;
     private static long lastDropTime = 0; // Temps de la dernière bombe déposée// Cooldown de 5 secondes
     public static final SpriteStore spriteStore = new SpriteStore();
     private final Sprite explosionSprite;
@@ -74,10 +74,6 @@ public class Bomb extends AbstractMovable {
         this(game, xPosition, yPosition, spriteStore.getSprite("bomb"), spriteStore.getSprite("explosion"), explosionSize);
     }
 
-    @Override
-    public void interactWithPlayer(Player player) {
-        player.decreaseLives(1);
-    }
 
     /**
      * Gère le déplacement de la bombe. Si le temps écoulé depuis le dépôt de la bombe dépasse
@@ -93,7 +89,6 @@ public class Bomb extends AbstractMovable {
         if (elapsedTime >= BOMB_LIFESPAN) {
             explode(); // Déclenche l'explosion si le temps est écoulé
         }
-
         return true; // La bombe ne se déplace pas, donc toujours vrai
     }
 
@@ -203,7 +198,7 @@ public class Bomb extends AbstractMovable {
      */
     public void drop(int xDropPosition, int yDropPosition) {
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastDropTime >= COOLDOWN_TIME) {
+        //if (currentTime - lastDropTime >= COOLDOWN_TIME) {
             timeWhenDropped = currentTime;
             this.xDropPosition = xDropPosition;
             this.yDropPosition = yDropPosition;
@@ -211,7 +206,7 @@ public class Bomb extends AbstractMovable {
             this.yPosition.set(yDropPosition);
             game.addMovable(this);
             lastDropTime = currentTime;
-        }
+        //}
     }
 
 
