@@ -3,7 +3,6 @@ package fr.univartois.butinfo.r304.bomberman.model.movables;
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
-import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Explosion;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -80,15 +79,16 @@ public class Player extends AbstractMovable {
     public void decreaseLives(int points) {
         this.lives.set(this.lives.get() - points);
         if (lives.get() <= 0) {
-            game.removeMovable(this); // Retirer le joueur du jeu si les vies sont à 0
+            game.playerIsDead();
         }
     }
 
     @Override
     public void explode() {
-        decreaseLives(1);
-        if (lives.get() <= 0) {
-            game.removeMovable(this);
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastHitTime >= COOLDOWN_TIME) {
+            decreaseLives(1);
+            lastHitTime = currentTime; // Mise à jour du dernier temps de collision
         }
     }
 
@@ -100,29 +100,6 @@ public class Player extends AbstractMovable {
             decreaseLives(1);
             lastHitTime = currentTime; // Mise à jour du dernier temps de collision
         }
-    }
-
-    public void dropBomb() {
-        if (!this.getBombs().isEmpty()) {
-            Bomb bomb = this.getBombs().removeFirst();
-            int playerX = (int) this.getXPosition();
-            int playerY = (int) this.getYPosition();
-            bomb.drop(playerX, playerY);
-            game.addMovable(bomb);
-        }
-    }
-
-    public void useBomb() {
-        if (!bombs.isEmpty()) {
-            bombs.removeLast(); // Retire la dernière bombe de la liste
-        }
-    }
-
-
-
-    @Override
-    public void interactWithPlayer(Player player) {
-        // Ne fait rien pour éviter les interactions fatales entre ennemis
     }
 
     @Override
@@ -137,11 +114,6 @@ public class Player extends AbstractMovable {
 
     @Override
     public void collidedWith(IMovable other) {
-        // Si l'objet en collision est un ennemi, appliquer le cooldown de 3 secondes
-        if (other.isEnemy()) {
-            hitEnemy();
-        } else {
-            other.interactWithPlayer(this);
-        }
+
     }
 }

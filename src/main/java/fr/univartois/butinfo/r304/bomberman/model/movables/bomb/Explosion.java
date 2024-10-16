@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class Explosion extends AbstractMovable {
 
-    public static final long EXPLOSION_DURATION = 500; // 1/2 seconde
+    public static final long EXPLOSION_DURATION = 400; // 1/2 seconde
     private final long explosionBegin;
     public static final SpriteStore spriteStore = new SpriteStore();
 
@@ -45,11 +45,6 @@ public class Explosion extends AbstractMovable {
         this(game, xPosition, yPosition, spriteStore.getSprite("explosion"));
     }
 
-    @Override
-    public void interactWithPlayer(Player player) {
-        player.decreaseLives(1);
-    }
-
     /**
      * Gère le déplacement de l'explosion. Si la durée de l'explosion dépasse
      * EXPLOSION_DURATION, elle est consommée (retirée du jeu).
@@ -60,7 +55,7 @@ public class Explosion extends AbstractMovable {
     @Override
     public boolean move(long delta) {
         if(System.currentTimeMillis() - explosionBegin > EXPLOSION_DURATION ) {
-            this.consume();
+            game.removeMovable(this);
         }
         return true;
     }

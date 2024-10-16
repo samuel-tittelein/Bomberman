@@ -212,7 +212,7 @@ public final class BombermanGame {
 
         // Ajout des bombes initiales pour le joueur.
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
-            Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("explosion"), 3); // Taille de l'explosion fixée à 3
+            Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3); // Taille de l'explosion fixée à 3
             player.addBomb(bomb);
         }
 
@@ -229,7 +229,7 @@ public final class BombermanGame {
 
 
     /**
-     * Initialise les statistiques de cette partie.
+     * Initialie les statistiques de cette partie.
      */
     private void initStatistics() {
         // Lier les propriétés du joueur avec celles du contrôleur.
@@ -303,15 +303,20 @@ public final class BombermanGame {
      */
     public void dropBomb() {
         if (!player.getBombs().isEmpty()) {
-            Bomb bomb = player.getBombs().removeFirst(); // Retirer la première bombe de la liste
-            int playerX = (int) player.getXPosition();
-            int playerY = (int) player.getYPosition();
-
-            // Déposer la bombe à la position du joueur
-            bomb.drop(playerX, playerY);
-            addMovable(bomb); // Ajoute la bombe au jeu
+            dropBomb(player.getBombs().removeFirst());
         }
     }
+
+    /**
+     * Dépose une bombe sur la tuile où se trouve le joueur, et programme l'explosion de
+     * cette bombe.
+     *
+     * @param bomb La bombe à déposer.
+     */
+    public void dropBomb(Bomb bomb) {
+        bomb.drop(getCellOf(player));
+    }
+
 
     /**
      * Récupére la cellule correspondant à la position d'un objet mobile.

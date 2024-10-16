@@ -14,11 +14,6 @@ public class Enemy extends AbstractMovable {
     return true;
   }
 
-  @Override
-  public void interactWithPlayer(Player player) {
-    player.decreaseLives(1); // Example: Decrease player's lives by 1
-  }
-
   /**
    * Crée une nouvelle instance d'Enemy.
    *
@@ -27,8 +22,7 @@ public class Enemy extends AbstractMovable {
    * @param yPosition La position en y initiale de l'objet.
    * @param sprite    L'instance de {@link Sprite} représentant l'objet.
    */
-  public Enemy(BombermanGame game, double xPosition,
-      double yPosition, Sprite sprite) {
+  public Enemy(BombermanGame game, double xPosition, double yPosition, Sprite sprite) {
     super(game, xPosition, yPosition, sprite);
   }
 
@@ -39,13 +33,11 @@ public class Enemy extends AbstractMovable {
 
   @Override
   public void explode() {
-    game.removeMovable(this);
+    game.enemyIsDead(this);
   }
 
   @Override
-  public void hitEnemy() {
-    explode();
-  }
+  public void hitEnemy() {}
 
   @Override
   public boolean move(long delta) {
