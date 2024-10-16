@@ -4,27 +4,20 @@ import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
 import fr.univartois.butinfo.r304.bomberman.model.movables.AbstractMovable;
-import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.Objects;
-import java.util.logging.Logger;
+
 
 import static java.lang.System.currentTimeMillis;
 
 public class Bomb extends AbstractMovable {
 
-    public static final long BOMB_LIFESPAN = 4500; // Durée de vie de 4.5 secondes
-    //public static final long COOLDOWN_TIME = 4500;
-    //private static long lastDropTime = 0; // Temps de la dernière bombe déposée// Cooldown de 5 secondes
+    public static final long BOMB_LIFESPAN = 1700; // Durée de vie de 1.7 secondes
     public static final SpriteStore spriteStore = new SpriteStore();
     private final int explosionSize;
     private long timeWhenDropped;
-    Logger logger = Logger.getLogger("tkt.log");
 
 
     /**
@@ -58,7 +51,6 @@ public class Bomb extends AbstractMovable {
         // Vérifie si le temps écoulé depuis le dépôt de la bombe dépasse BOMB_LIFESPAN
         long elapsedTime = currentTimeMillis() - timeWhenDropped;
         if (elapsedTime > BOMB_LIFESPAN) {
-            logger.info("ms , elapsedTime : " + elapsedTime + "ms");
             explode(); // Déclenche l'explosion si le temps est écoulé
         }
         return true; // La bombe ne se déplace pas, donc toujours vrai
@@ -82,9 +74,8 @@ public class Bomb extends AbstractMovable {
      */
     @Override
     public void explode() {
-        logger.info("bombe explosé à : " + currentTimeMillis() );
         game.addMovable(new Explosion(game, getX(), getY()));
-        logger.info("Bombe explose au coord : "+ getX() + ", " + getY());
+
         for (int direction = 0; direction < 4; direction++) {
             spreadExplosion(direction, getX(), getY(), 0, getHeight());
         }
@@ -164,12 +155,8 @@ public class Bomb extends AbstractMovable {
 
 
     public void drop(Cell cell) {
-
-
         long currentTime = currentTimeMillis();
-        //if (currentTime - lastDropTime >= COOLDOWN_TIME) {
         timeWhenDropped = currentTime;
-        logger.info("bombe larguée à : " + timeWhenDropped );
 
         int x = cell.getColumn() * cell.getWidth();
         int y = cell.getRow() * cell.getHeight();
@@ -178,8 +165,6 @@ public class Bomb extends AbstractMovable {
         setY(y);
 
         game.addMovable(this);
-            //lastDropTime = currentTime;
-        //}
     }
 
 
