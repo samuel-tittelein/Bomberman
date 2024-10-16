@@ -80,16 +80,13 @@ public class Player extends AbstractMovable {
     public void decreaseLives(int points) {
         this.lives.set(this.lives.get() - points);
         if (lives.get() <= 0) {
-            game.removeMovable(this); // Retirer le joueur du jeu si les vies sont à 0
+            game.playerIsDead();
         }
     }
 
     @Override
     public void explode() {
         decreaseLives(1);
-        if (lives.get() <= 0) {
-            die();
-        }
     }
 
     @Override
@@ -99,10 +96,6 @@ public class Player extends AbstractMovable {
             decreaseLives(1);
             lastHitTime = currentTime; // Mise à jour du dernier temps de collision
         }
-    }
-
-    public void die() {
-        game.removeMovable(this);
     }
 
     @Override
