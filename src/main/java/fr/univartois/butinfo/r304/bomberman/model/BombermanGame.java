@@ -263,6 +263,7 @@ public final class BombermanGame {
     public void moveUp() {
         stopMoving();
         player.setVerticalSpeed(-DEFAULT_SPEED);
+        getCellAt(0,0).getWall().setSprite(spriteStore.getSprite("intact_wall"));
     }
 
     /**

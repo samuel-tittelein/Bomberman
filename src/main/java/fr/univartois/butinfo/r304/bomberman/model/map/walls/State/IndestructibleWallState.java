@@ -7,7 +7,7 @@ public class IndestructibleWallState extends AbstractWallState {
         super("wall");
     }
 
-    public IWallState nextState() {
+    public IWallState next() {
         return this;
     }
 }

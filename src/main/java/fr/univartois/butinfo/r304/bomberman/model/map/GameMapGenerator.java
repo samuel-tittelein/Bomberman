@@ -8,9 +8,6 @@ import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 public class GameMapGenerator {
 
     SpriteStore ss = new SpriteStore();
-    Cell wall = new Cell(new Wall(State.DEGRADED));
-    Cell indestuctibleWall = new Cell(new Wall(State.INDESTRUCTIBLE));
-    Cell lawn = new Cell(ss.getSprite("lawn"));
 
     public GameMap fillMap(GameMap map) {
         int rows = map.getHeight();
@@ -19,10 +16,13 @@ public class GameMapGenerator {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) { // Bordures
-                    map.setAt(i, j, indestuctibleWall);
+                    Cell indestructibleWall = new Cell(new Wall(State.INDESTRUCTIBLE));
+                    map.setAt(i, j, indestructibleWall);
                 } else if (Math.random() < 0.2) { // Mur aléatoire avec probabilité de 20%
+                    Cell wall = new Cell(new Wall());
                     map.setAt(i, j, wall);
                 } else {
+                    Cell lawn = new Cell(ss.getSprite("lawn"));
                     map.setAt(i, j, lawn);
                 }
             }

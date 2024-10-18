@@ -18,6 +18,8 @@ package fr.univartois.butinfo.r304.bomberman.model.map.walls;
 
 import fr.univartois.butinfo.r304.bomberman.model.map.walls.State.*;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
+import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
+
 
 /**
  * La classe {@link Wall} représente un mur de briques sur la carte du jeu.
@@ -74,8 +76,14 @@ public final class Wall {
         return sprite;
     }
 
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
+
     public void nextState() {
-        state = state.nextState();
-        sprite = state.getSprite();
+        state = state.next();
+        System.out.println();
+        this.setSprite(new SpriteStore().getSprite("degraded_wall"));
+
     }
 }

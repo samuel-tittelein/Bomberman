@@ -5,5 +5,5 @@ import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 public interface IWallState {
 
     Sprite getSprite();
-    IWallState nextState();
+    IWallState next();
 }

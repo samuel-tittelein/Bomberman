@@ -134,8 +134,9 @@ public class Bomb extends AbstractMovable {
         // Vérification de la cellule actuelle pour voir s'il y a un mur.
         Cell currentCell = game.getCellAt(x, y);
         if (currentCell.getWall() != null) {
-            // Si un mur est présent, le remplacer par une cellule vide (herbe, par exemple).
-            currentCell.replaceBy(new Cell(spriteStore.getSprite("lawn")));
+            // Si un mur est présent, le remplacer par une cellule vide.
+            currentCell.getWall().nextState();
+            //currentCell.replaceBy(new Cell(spriteStore.getSprite("lawn")));
             return;  // On arrête la propagation de l'explosion car un mur a été détruit.
         }
 
