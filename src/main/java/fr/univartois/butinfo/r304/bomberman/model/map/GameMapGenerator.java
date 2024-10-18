@@ -1,6 +1,7 @@
 package fr.univartois.butinfo.r304.bomberman.model.map;
 
 
+import fr.univartois.butinfo.r304.bomberman.model.map.walls.Wall;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 
 public class GameMapGenerator {

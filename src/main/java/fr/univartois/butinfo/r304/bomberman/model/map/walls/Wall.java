@@ -14,7 +14,7 @@
  * Tous droits réservés.
  */
 
-package fr.univartois.butinfo.r304.bomberman.model.map;
+package fr.univartois.butinfo.r304.bomberman.model.map.walls;
 
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 
