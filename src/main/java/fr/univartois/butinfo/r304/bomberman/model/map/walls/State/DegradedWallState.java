@@ -4,7 +4,7 @@ import fr.univartois.butinfo.r304.bomberman.model.map.walls.IWallState;
 
 public class DegradedWallState extends AbstractWallState {
     public DegradedWallState() {
-        super("wall_degraded");
+        super("degraded_wall");
     }
 
     public IWallState nextState() {

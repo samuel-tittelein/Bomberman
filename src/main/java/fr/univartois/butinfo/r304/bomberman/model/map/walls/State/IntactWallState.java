@@ -4,7 +4,7 @@ import fr.univartois.butinfo.r304.bomberman.model.map.walls.IWallState;
 
 public class IntactWallState extends AbstractWallState {
     public IntactWallState() {
-        super("wall_intact");
+        super("intact_wall");
     }
 
     public IWallState nextState() {
