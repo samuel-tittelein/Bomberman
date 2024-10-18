@@ -33,6 +33,7 @@ public final class Wall {
      * Le sprite représentant ce mur sur la carte.
      */
     private Sprite sprite;
+    private IWallState state;
 
     /**
      * Crée une nouvelle instance de Wall.
@@ -52,4 +53,16 @@ public final class Wall {
         return sprite;
     }
 
+    public IWallState getState() {
+        return state;
+    }
+
+    public void setState(IWallState state) {
+        this.state = state;
+    }
+
+    public void nextState() {
+        state = state.nextState();
+        sprite = state.getSprite();
+    }
 }
