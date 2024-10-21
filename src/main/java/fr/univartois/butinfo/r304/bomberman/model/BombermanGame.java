@@ -16,7 +16,6 @@
 
 package fr.univartois.butinfo.r304.bomberman.model;
 
-import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -29,7 +28,6 @@ import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
-import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 import javafx.animation.AnimationTimer;
 
 /**

@@ -162,8 +162,7 @@ public class Bomb extends AbstractMovable {
 
 
     public void drop(Cell cell) {
-        long currentTime = currentTimeMillis();
-        timeWhenDropped = currentTime;
+        timeWhenDropped = currentTimeMillis();
 
         int x = cell.getColumn() * cell.getWidth();
         int y = cell.getRow() * cell.getHeight();
