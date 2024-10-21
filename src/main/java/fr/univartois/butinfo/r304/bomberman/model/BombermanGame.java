@@ -58,7 +58,7 @@ public final class BombermanGame {
     /**
      * Le nombre de bombes initialement disponibles pour le joueur.
      */
-    public static final int DEFAULT_BOMBS = 5;
+    public static final int DEFAULT_BOMBS = 500;
 
     /**
      * La largeur de la carte du jeu (en pixels).
