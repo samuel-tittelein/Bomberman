@@ -82,8 +82,12 @@ public final class Wall {
 
     public void nextState() {
         state = state.next();
-        System.out.println();
-        this.setSprite(new SpriteStore().getSprite("degraded_wall"));
+        if (state != null) {
+            setSprite(state.getSprite());
+        }
+    }
 
+    public IWallState getState() {
+        return state;
     }
 }
