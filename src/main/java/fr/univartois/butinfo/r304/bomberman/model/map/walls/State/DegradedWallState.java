@@ -8,7 +8,6 @@ public class DegradedWallState extends AbstractWallState {
     }
 
     public IWallState next() {
-        System.out.println("OK degraded");
         return new BrokenWallState();
     }
 }

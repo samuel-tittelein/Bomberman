@@ -8,9 +8,6 @@ public class BrokenWallState extends AbstractWallState {
     }
 
     public IWallState next() {
-        //TODO remplacer le mur par du gazon
-        System.out.println("OK broken");
-        //currentCell.replaceBy(new Cell(spriteStore.getSprite("lawn")));
-        return this;
+        return null;
     }
 }
