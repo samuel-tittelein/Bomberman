@@ -335,12 +335,8 @@ public abstract class AbstractMovable implements IMovable {
             return true;
         }
 
-        if (game.getCellAt(x + getWidth() - MARGIN, y + getHeight() - MARGIN).getWall() != null) {
-            // Le coin inférieur droit de l'objet a atteint un mur.
-            return true;
-        }
-
-        return false;
+        // Le coin inférieur droit de l'objet a atteint un mur.
+        return game.getCellAt(x + getWidth() - MARGIN, y + getHeight() - MARGIN).getWall() != null;
     }
 
     /*
@@ -358,8 +354,8 @@ public abstract class AbstractMovable implements IMovable {
             return false;
         }
 
-        Rectangle rectangle = new Rectangle(getX(), getY(), getWidth(), getHeight());
-        return rectangle.intersects(other.getX(), other.getY(), other.getWidth(), other.getHeight());
+        Rectangle rectangle = new Rectangle(getX()+MARGIN, getY()+MARGIN, getWidth()-MARGIN, getHeight()-MARGIN);
+        return rectangle.intersects(other.getX()+MARGIN, other.getY()+MARGIN, other.getWidth()-MARGIN, other.getHeight()-MARGIN);
     }
 
     /*
