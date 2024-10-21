@@ -3,7 +3,6 @@ package fr.univartois.butinfo.r304.bomberman.model.movables.bomb;
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.movables.AbstractMovable;
-import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 
@@ -11,7 +10,7 @@ import java.util.Objects;
 
 public class Explosion extends AbstractMovable {
 
-    public static final long EXPLOSION_DURATION = 400; // 1/2 seconde
+    public static final long EXPLOSION_DURATION = 200; // 0,2 secondes
     private final long explosionBegin;
     public static final SpriteStore spriteStore = new SpriteStore();
 

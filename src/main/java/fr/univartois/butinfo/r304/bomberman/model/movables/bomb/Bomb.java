@@ -3,6 +3,7 @@ package fr.univartois.butinfo.r304.bomberman.model.movables.bomb;
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
+import fr.univartois.butinfo.r304.bomberman.model.map.walls.Wall;
 import fr.univartois.butinfo.r304.bomberman.model.movables.AbstractMovable;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
@@ -134,8 +135,14 @@ public class Bomb extends AbstractMovable {
         // Vérification de la cellule actuelle pour voir s'il y a un mur.
         Cell currentCell = game.getCellAt(x, y);
         if (currentCell.getWall() != null) {
-            // Si un mur est présent, le remplacer par une cellule vide (herbe, par exemple).
-            currentCell.replaceBy(new Cell(spriteStore.getSprite("lawn")));
+            currentCell.getWall().nextState(); // Le mur passe à l'état suivant.
+            Wall replace = currentCell.getWall(); // Le mur qui a été détruit.
+            if (replace.getState() == null) { // Le mur est un mur vide. TODO : trouver une autre implémentation
+                currentCell.replaceBy(new Cell(spriteStore.getSprite("lawn")));
+            } else {
+                currentCell.replaceBy(new Cell(replace));
+            }
+            //currentCell.replaceBy(new Cell(spriteStore.getSprite("lawn")));
             return;  // On arrête la propagation de l'explosion car un mur a été détruit.
         }
 
@@ -155,8 +162,7 @@ public class Bomb extends AbstractMovable {
 
 
     public void drop(Cell cell) {
-        long currentTime = currentTimeMillis();
-        timeWhenDropped = currentTime;
+        timeWhenDropped = currentTimeMillis();
 
         int x = cell.getColumn() * cell.getWidth();
         int y = cell.getRow() * cell.getHeight();

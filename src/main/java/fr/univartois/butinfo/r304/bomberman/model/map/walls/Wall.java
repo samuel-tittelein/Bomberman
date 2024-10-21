@@ -14,9 +14,11 @@
  * Tous droits réservés.
  */
 
-package fr.univartois.butinfo.r304.bomberman.model.map;
+package fr.univartois.butinfo.r304.bomberman.model.map.walls;
 
+import fr.univartois.butinfo.r304.bomberman.model.map.walls.State.*;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
+
 
 /**
  * La classe {@link Wall} représente un mur de briques sur la carte du jeu.
@@ -33,14 +35,35 @@ public final class Wall {
      * Le sprite représentant ce mur sur la carte.
      */
     private Sprite sprite;
+    private IWallState state;
 
     /**
      * Crée une nouvelle instance de Wall.
      *
-     * @param sprite Le sprite représentant le mur sur la carte.
+     * @param state l'état du mur
      */
-    public Wall(Sprite sprite) {
-        this.sprite = sprite;
+    public Wall(State state) {
+        switch (state) {
+            case INDESTRUCTIBLE:
+                this.state = new IndestructibleWallState();
+                break;
+            case INTACT:
+                this.state = new IntactWallState();
+                break;
+            case DEGRADED:
+                this.state = new DegradedWallState();
+                break;
+            case BROKEN:
+                this.state = new BrokenWallState();
+                break;
+            default:
+                this.state = new IntactWallState();
+        }
+        this.sprite = this.state.getSprite();
+    }
+
+    public Wall() {
+        this(State.INTACT);
     }
 
     /**
@@ -52,4 +75,18 @@ public final class Wall {
         return sprite;
     }
 
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
+
+    public void nextState() {
+        state = state.next();
+        if (state != null) {
+            setSprite(state.getSprite());
+        }
+    }
+
+    public IWallState getState() {
+        return state;
+    }
 }
