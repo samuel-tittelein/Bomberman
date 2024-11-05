@@ -183,7 +183,8 @@ public final class BombermanGame {
 
         GameMap map = new GameMap(mapHeightInCells,mapWidthInCells);
         GameMapGenerator generator = new GameMapGenerator();
-        return generator.fillMap(map);
+        generator.fillMap(map);
+        return map;
     }
 
     /**
