@@ -1,14 +1,14 @@
-package fr.univartois.butinfo.r304.bomberman.model.map.walls.State;
+package fr.univartois.butinfo.r304.bomberman.model.map.walls.state;
 
 import fr.univartois.butinfo.r304.bomberman.model.map.walls.IWallState;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 
 abstract class AbstractWallState implements IWallState {
-    public static SpriteStore sp = new SpriteStore();
+    public static final SpriteStore sp = new SpriteStore();
     protected Sprite sprite;
 
-    public AbstractWallState(String identifier) {
+    protected AbstractWallState(String identifier) {
         sprite = sp.getSprite(identifier);
     }
 

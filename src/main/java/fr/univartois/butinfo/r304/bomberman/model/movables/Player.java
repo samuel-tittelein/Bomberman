@@ -103,16 +103,6 @@ public class Player extends AbstractMovable {
     }
 
     @Override
-    public boolean isEnemy() {
-        return super.isEnemy();
-    }
-
-    @Override
-    public boolean move(long delta) {
-        return super.move(delta);
-    }
-
-    @Override
     public void collidedWith(IMovable other) {
 
     }

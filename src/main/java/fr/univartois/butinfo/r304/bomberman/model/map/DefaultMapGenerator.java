@@ -1,7 +1,7 @@
 package fr.univartois.butinfo.r304.bomberman.model.map;
 
 
-import fr.univartois.butinfo.r304.bomberman.model.map.walls.State.State;
+import fr.univartois.butinfo.r304.bomberman.model.map.walls.state.State;
 import fr.univartois.butinfo.r304.bomberman.model.map.walls.Wall;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 
