@@ -4,6 +4,8 @@ import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -12,8 +14,8 @@ import javafx.collections.ObservableList;
 public class Player extends AbstractMovable {
 
     private final ObservableList<Bomb> bombs = FXCollections.observableArrayList();
-    private IntegerProperty score;
-    private IntegerProperty lives;
+    private final IntegerProperty score;
+    private final IntegerProperty lives;
 
     private long lastHitTime = 0; // Timestamp pour le cooldown de collision
     private static final int COOLDOWN_TIME = 3000; // 3 secondes de cooldown (sinon il perd trop de pdv trop rapidement)
@@ -22,10 +24,6 @@ public class Player extends AbstractMovable {
         super(game, xPosition, yPosition, sprite);
         this.score = new SimpleIntegerProperty(0);
         this.lives = new SimpleIntegerProperty(3);
-    }
-
-    public IntegerProperty scoreProperty() {
-        return score;
     }
 
     public IntegerProperty getLivesProperty() {
@@ -40,8 +38,8 @@ public class Player extends AbstractMovable {
         this.score.set(this.score.get() + points);
     }
 
-    public IntegerProperty getBombsProperty() {
-        return new SimpleIntegerProperty(bombs.size());
+    public IntegerBinding getBombsProperty() {
+        return Bindings.size(this.bombs);
     }
 
     public void addBomb(Bomb bomb) {
@@ -66,10 +64,6 @@ public class Player extends AbstractMovable {
 
     public void increaseScore(int points) {
         this.score.set(this.score.get() + points);
-    }
-
-    public IntegerProperty livesProperty() {
-        return lives;
     }
 
     public int getLives() {
@@ -114,6 +108,10 @@ public class Player extends AbstractMovable {
 
     @Override
     public void collidedWith(IMovable other) {
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }
