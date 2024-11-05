@@ -16,15 +16,17 @@
 
 package fr.univartois.butinfo.r304.bomberman.model;
 
-import fr.univartois.butinfo.r304.bomberman.model.movables.EnemyHPDecorator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.univartois.butinfo.r304.bomberman.model.map.*;
+import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
+import fr.univartois.butinfo.r304.bomberman.model.map.GameMap;
+import fr.univartois.butinfo.r304.bomberman.model.map.GameMapGenerator;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Enemy;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.strategy.RandomMovementStrategy;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.HorizontalBomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.LargeBomb;
@@ -47,7 +49,7 @@ public final class BombermanGame {
     // Constantes pour la position initiale du joueur. (à modifier potentiellement plus tard)
     public static final double PLAYER_INITIAL_X = 100.0;  // Position initiale en X
     public static final double PLAYER_INITIAL_Y = 100.0;  // Position initiale en Y
-    private static final IMapGenerator MAP_CREATOR = new SecretMapGenerator();
+
     /**
      * Le génarateur de nombres aléatoires utilisé dans le jeu.
      */
@@ -178,17 +180,15 @@ public final class BombermanGame {
      *
      * @return La carte du jeu ayant été créée.
      */
-
     private GameMap createMap() {
-
         int cellSize = spriteStore.getSpriteSize();
 
         int mapWidthInCells = width / cellSize;
         int mapHeightInCells = height / cellSize;
 
         GameMap map = new GameMap(mapHeightInCells,mapWidthInCells);
-
-        MAP_CREATOR.fillMap(map);
+        GameMapGenerator generator = new GameMapGenerator();
+        generator.fillMap(map);
         return map;
     }
 
@@ -216,23 +216,15 @@ public final class BombermanGame {
 
         // Ajout des bombes initiales pour le joueur.
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
-            //ajoute une bombe horizontale
-            player.addBomb(new HorizontalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
-            //ajoute une bombe verticale
-            player.addBomb(new VerticalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
-            //ajoute une bombe normale avec pour taille par défaut 3
             Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3); // Taille de l'explosion fixée à 3
             player.addBomb(bomb);
-            //ajoute une grosse bombe (taille par défaut 8)
-            player.addBomb(new LargeBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), 3)));
-
         }
 
 
         // Création des ennemis sur la carte.
         for (int i = 0; i < nbEnemies; i++) {
             Enemy enemy = new Enemy(this, 0, 0, spriteStore.getSprite("goblin"));
-            enemy.setHorizontalSpeed(DEFAULT_SPEED);
+            enemy.setMovementStrategy(new RandomMovementStrategy()); // Définit la stratégie de mouvement
             EnemyHPDecorator decEnemy = new EnemyHPDecorator(3, this, enemy);
             movableObjects.add(decEnemy);
             spawnMovable(decEnemy);
@@ -326,7 +318,7 @@ public final class BombermanGame {
      *
      * @param bomb La bombe à déposer.
      */
-    public void dropBomb(IBomb bomb) {
+    public void dropBomb(Bomb bomb) {
         bomb.drop(getCellOf(player));
     }
 
@@ -398,7 +390,6 @@ public final class BombermanGame {
      * Si c'était le dernier, le joueur gagne la partie.
      *
      * @param enemy L'ennemi qui a été tué.
-     *
      */
     public void enemyIsDead(IMovable enemy) {
         // Mettre à jour le score du joueur (exemple : +100 points par ennemi).

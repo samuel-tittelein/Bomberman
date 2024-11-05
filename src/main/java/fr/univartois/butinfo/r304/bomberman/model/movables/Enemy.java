@@ -56,23 +56,4 @@ public class Enemy extends AbstractMovable {
     }
     return super.move(delta);
   }
-
-  private void changeDirectionRandomly() {
-    // 50% de chance de changer la vitesse horizontale
-    if (RANDOM.nextBoolean()) {
-      setHorizontalSpeed(getRandomSpeed());
-    }
-    // 50% de chance de changer la vitesse verticale
-    if (RANDOM.nextBoolean()) {
-      setVerticalSpeed(getRandomSpeed());
-    }
-  }
-
-  private double getRandomSpeed() {
-    double speed;
-    do {
-      speed = -100 + (200) * RANDOM.nextDouble();
-    } while (speed > -10 && speed < 10);
-    return speed;
-  }
 }
