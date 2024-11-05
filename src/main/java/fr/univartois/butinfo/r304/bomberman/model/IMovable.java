@@ -122,7 +122,7 @@ public interface IMovable {
      * Modifie la vitesse horizontale de cet objet.
      *
      * @param speed La nouvelle vitesse horizontale de cet objet (en pixels/s).
-     */
+     */ 
     void setHorizontalSpeed(double speed);
 
     /**

@@ -20,9 +20,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
-import fr.univartois.butinfo.r304.bomberman.model.map.GameMap;
-import fr.univartois.butinfo.r304.bomberman.model.map.GameMapGenerator;
+import fr.univartois.butinfo.r304.bomberman.model.map.*;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Enemy;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
@@ -44,7 +42,7 @@ public final class BombermanGame {
     // Constantes pour la position initiale du joueur. (à modifier potentiellement plus tard)
     public static final double PLAYER_INITIAL_X = 100.0;  // Position initiale en X
     public static final double PLAYER_INITIAL_Y = 100.0;  // Position initiale en Y
-
+    private static final IMapGenerator MAP_CREATOR = new RandomMapGenerator();
     /**
      * Le génarateur de nombres aléatoires utilisé dans le jeu.
      */
@@ -175,15 +173,17 @@ public final class BombermanGame {
      *
      * @return La carte du jeu ayant été créée.
      */
+
     private GameMap createMap() {
+
         int cellSize = spriteStore.getSpriteSize();
 
         int mapWidthInCells = width / cellSize;
         int mapHeightInCells = height / cellSize;
 
         GameMap map = new GameMap(mapHeightInCells,mapWidthInCells);
-        GameMapGenerator generator = new GameMapGenerator();
-        generator.fillMap(map);
+
+        MAP_CREATOR.fillMap(map);
         return map;
     }
 
@@ -384,7 +384,7 @@ public final class BombermanGame {
      * Si c'était le dernier, le joueur gagne la partie.
      *
      * @param enemy L'ennemi qui a été tué.
-     */
+     *
     public void enemyIsDead(IMovable enemy) {
         // Mettre à jour le score du joueur (exemple : +100 points par ennemi).
         player.addScore(100);
