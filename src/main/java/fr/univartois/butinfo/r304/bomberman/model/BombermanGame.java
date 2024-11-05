@@ -385,6 +385,7 @@ public final class BombermanGame {
      *
      * @param enemy L'ennemi qui a été tué.
      *
+     */
     public void enemyIsDead(IMovable enemy) {
         // Mettre à jour le score du joueur (exemple : +100 points par ennemi).
         player.addScore(100);
