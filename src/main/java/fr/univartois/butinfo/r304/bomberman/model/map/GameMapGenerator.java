@@ -10,7 +10,7 @@ public class GameMapGenerator {
     private static final State DEFAULT_WALL_STATE = State.INTACT;
     SpriteStore ss = new SpriteStore();
 
-    public GameMap fillMap(GameMap map) {
+    public void fillMap(GameMap map) {
         int rows = map.getHeight();
         int cols = map.getWidth();
 
@@ -28,6 +28,5 @@ public class GameMapGenerator {
                 }
             }
         }
-        return map;
     }
 }

@@ -33,7 +33,7 @@ import javafx.scene.shape.Rectangle;
  *
  * @version 0.1.0
  */
-public abstract class AbstractMovable implements IMovable {
+public abstract class   AbstractMovable implements IMovable {
 
     /**
      * La marge de sécurité pour les obstacles (en pixels).
