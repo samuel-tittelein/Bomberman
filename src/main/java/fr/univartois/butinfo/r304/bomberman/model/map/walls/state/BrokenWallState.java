@@ -1,4 +1,4 @@
-package fr.univartois.butinfo.r304.bomberman.model.map.walls.State;
+package fr.univartois.butinfo.r304.bomberman.model.map.walls.state;
 
 import fr.univartois.butinfo.r304.bomberman.model.map.walls.IWallState;
 
