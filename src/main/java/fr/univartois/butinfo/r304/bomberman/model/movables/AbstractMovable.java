@@ -308,6 +308,7 @@ public abstract class   AbstractMovable implements IMovable {
         return true;
     }
 
+
     /**
      * Vérifie si la nouvelle position de l'objet est sur un mur.
      *
