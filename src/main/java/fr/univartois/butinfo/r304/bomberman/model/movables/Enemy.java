@@ -2,12 +2,16 @@ package fr.univartois.butinfo.r304.bomberman.model.movables;
 
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
+import fr.univartois.butinfo.r304.bomberman.model.movables.strategy.MovementStrategy;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import java.util.Random;
 
 public class Enemy extends AbstractMovable {
 
   private static final Random RANDOM = new Random();
+
+  // Attribut pour la stratégie de mouvement
+  private MovementStrategy movementStrategy;
 
   @Override
   public boolean isEnemy() {
@@ -26,6 +30,11 @@ public class Enemy extends AbstractMovable {
     super(game, xPosition, yPosition, sprite);
   }
 
+  // Méthode pour définir la stratégie de mouvement
+  public void setMovementStrategy(MovementStrategy movementStrategy) {
+    this.movementStrategy = movementStrategy;
+  }
+
   @Override
   public void collidedWith(IMovable other) {
     other.hitEnemy();
@@ -41,11 +50,11 @@ public class Enemy extends AbstractMovable {
 
   @Override
   public boolean move(long delta) {
-    boolean moved = super.move(delta);
-    if (!moved) {
-      changeDirectionRandomly();
+    // Utilise la stratégie de mouvement pour calculer les vitesses
+    if (movementStrategy != null) {
+      movementStrategy.calculateMovement(this);
     }
-    return moved;
+    return super.move(delta);
   }
 
   private void changeDirectionRandomly() {
