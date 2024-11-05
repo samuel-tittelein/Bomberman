@@ -16,7 +16,277 @@ Vous pouvez retrouver ci-dessous les liens vers les sujets de TP vous guidant
 dans le développement de votre projet.
 
 - [Lancement du projet](https://gitlab.univ-artois.fr/enseignements-rwa/modules/but-2/r3-04/tp/-/tree/main/TP03)
+  @startuml
+  package grA1.iutlens.lens_judge {
 
+  package compilator {
+  class CompilatorC {
+  - static final String SOURCE_EXTENSION
+  - static final String BINARY_EXTENSION
+  - static CompilatorC instance
+  + static getInstance()
+  + boolean isCompatible(String filename)
+  + String compiledFilename(String filename)
+  + String getCommand(String filename)
+  }
+
+        class CompilatorCpp {
+            - static final String[] SOURCE_EXTENSIONS
+            - static final String BINARY_EXTENSION
+            - static CompilatorCpp instance
+            + static getInstance()
+            + boolean isCompatible(String filename)
+            + String compiledFilename(String filename)
+            + String getCommand(String filename)
+        }
+
+        class CompilatorJava {
+            - static final String SOURCE_EXTENSION
+            - static final String BINARY_EXTENSION
+            - static CompilatorJava instance
+            + static getInstance()
+            + boolean isCompatible(String filename)
+            + String compiledFilename(String filename)
+            + String getCommand(String filename)
+        }
+
+        class CompilatorPython {
+            - static final String SOURCE_EXTENSION
+            - static CompilatorPython instance
+            + static getInstance()
+            + boolean isCompatible(String filename)
+            + String compiledFilename(String filename)
+            + String getCommand(String filename)
+        }
+
+        abstract class CompilatorStrategy {
+            + static String getFileExtension(String fileName)
+            + static String replaceLast(String string, String toReplace, String replacement)
+            + boolean isCompatible(String filename)
+            + String compiledFilename(String filename)
+            + String getCommand(String filename)
+            + int compile(String filename) throws IOException, InterruptedException
+        }
+
+        CompilatorC --|> CompilatorStrategy
+        CompilatorCpp --|> CompilatorStrategy
+        CompilatorJava --|> CompilatorStrategy
+        CompilatorPython --|> CompilatorStrategy
+  }
+
+  package verifier {
+  interface VerifierStrategy {
+  + boolean compareOutputs(List<String> programOutput, List<String> expectedOutput)
+  }
+
+        class CaseToleranceVerifierDecorator {
+            - VerifierStrategy verifierStrategy
+            + CaseToleranceVerifierDecorator(VerifierStrategy verifierStrategy)
+            + compareOutputs(List<String> programOutput, List<String> expectedOutput): boolean
+        }
+
+        class ErrorHandlingVerifierStrategy {
+            - VerifierStrategy verifierStrategy
+            + ErrorHandlingVerifierStrategy(VerifierStrategy verifierStrategy)
+            + compareOutputsWithErrors(List<String> standardOutput, List<String> expectedOutput, int exitCode): boolean
+        }
+
+        class ExternProcessVerifier {
+            - String externalVerifierPath
+            + ExternProcessVerifier(String externalVerifierPath)
+            + compareOutputs(List<String> programOutput, List<String> expectedOutput): boolean
+        }
+
+        class ListSolutionVerifier {
+            + compareOutputs(List<String> programOutput, List<String> expectedOutput): boolean
+        }
+
+        class OrderToleranceVerifier {
+            - static OrderToleranceVerifier instance
+            + static getInstance(): OrderToleranceVerifier
+            + compareOutputs(List<String> programOutput, List<String> expectedOutput): boolean
+        }
+
+        class PrecisionToleranceVerifier {
+            - static PrecisionToleranceVerifier instance
+            - static final double DEFAULT_TOLERANCE
+            - double tolerance
+            + static getInstance(): PrecisionToleranceVerifier
+            + compareOutputs(List<String> programOutput, List<String> expectedOutput): boolean
+        }
+
+        class StrictVerifier {
+            - static StrictVerifier instance
+            + static getInstance(): StrictVerifier
+            + compareOutputs(List<String> programOutput, List<String> expectedOutput): boolean
+        }
+
+        class Verifier {
+            - VerifierStrategy verifierStrategy
+            + Verifier(VerifierStrategy verifierStrategy)
+            + compareOutputs(List<String> standardOutput, List<String> expectedOutput, int exitCode): boolean
+            + VerifierStrategy getVerifierStrategy(): VerifierStrategy
+        }
+
+        CaseToleranceVerifierDecorator --|> VerifierStrategy
+        ErrorHandlingVerifierStrategy --> VerifierStrategy
+        ExternProcessVerifier --|> VerifierStrategy
+        ListSolutionVerifier --|> VerifierStrategy
+        OrderToleranceVerifier --|> VerifierStrategy
+        PrecisionToleranceVerifier --|> VerifierStrategy
+        StrictVerifier --|> VerifierStrategy
+        Verifier --> VerifierStrategy
+  }
+
+  package execution {
+  interface IExecutionStrategy {
+  + createProcess(String binaryPath): ProcessBuilder
+  }
+
+        class CExecution {
+            + createProcess(String binaryPath): ProcessBuilder
+        }
+
+        class JavaExecution {
+            + createProcess(String className): ProcessBuilder
+        }
+
+        class PythonExecution {
+            + createProcess(String binaryPath): ProcessBuilder
+        }
+
+        class Execution {
+            - IExecutionStrategy strategy
+            + Execution(IExecutionStrategy strategy)
+            + ProcessBuilder processPrepared(String filePath)
+            + void setStrategy(IExecutionStrategy strategy)
+        }
+
+        class Runner {
+            - String sourceFile
+            - File inputFile
+            - File expectedOutputFile
+            - Verifier verifier
+            - ProcessController processController
+            - final long timeLimit
+            + run(): void
+            - boolean compileSourceFile(): boolean
+            - void executeProgram(): void
+            - boolean verifyOutput(): boolean
+        }
+
+        class RunnerBuilder {
+            + setSourceFile(String sourceFile): RunnerBuilder
+            + setInputFile(File inputFile): RunnerBuilder
+            + setExpectedOutputFile(File expectedOutputFile): RunnerBuilder
+            + setVerifier(Verifier verifier): RunnerBuilder
+            + setProcessController(ProcessController processController): RunnerBuilder
+            + build(): Runner
+        }
+
+        CExecution --|> IExecutionStrategy
+        JavaExecution --|> IExecutionStrategy
+        PythonExecution --|> IExecutionStrategy
+        Execution --> IExecutionStrategy
+        Runner --> Verifier
+        Runner --> ProcessController
+        RunnerBuilder --> Runner
+  }
+
+  package process {
+  class ProcessAdapter {
+  - ProcessBuilder processBuilder
+  - Process process
+  - StringBuilder standardOutput
+  - StringBuilder errorOutput
+  + ProcessAdapter(String sourceFile, File inputFile)
+  + startProcess(String command): void
+  + getStandardOutput(): String
+  + getErrorOutput(): String
+  + isRunning(): boolean
+  + stopProcess(): void
+  }
+
+        interface ProcessController {
+            + startProcess(String command): void
+            + getStandardOutput(): String
+            + getErrorOutput(): String
+            + isRunning(): boolean
+            + stopProcess(): void
+        }
+
+        class TimedProcessDecorator {
+            - ProcessController processController
+            - long timeLimit
+            - boolean timedOut
+            + TimedProcessDecorator(ProcessController processController, long timeLimit)
+            + startProcess(String command): void
+            + getStandardOutput(): String
+            + getErrorOutput(): String
+            + isRunning(): boolean
+            + stopProcess(): void
+            + hasTimedOut(): boolean
+        }
+
+        ProcessAdapter --|> ProcessController
+        TimedProcessDecorator --|> ProcessController
+  }
+
+  package problem {
+  class BuilderProblem {
+  - List<TestCase> testCases
+  - long timeout
+  - long memoryLimit
+  - VerifierStrategy verifier
+  + addTestCase(TestCase testCase): BuilderProblem
+  + setTimeout(long timeout): BuilderProblem
+  + setMemoryLimit(long memoryLimit): BuilderProblem
+  + setVerifier(VerifierStrategy verifier): BuilderProblem
+  + List<TestCase> getTestCases(): List<TestCase>
+  + long getTimeout(): long
+  + long getMemoryLimit(): long
+  + VerifierStrategy getVerifier(): VerifierStrategy
+  + Problem build(): Problem
+  }
+
+        class Problem implements Iterable<TestCase> {
+            - List<TestCase> testCases
+            - long timeout
+            - long memoryLimit
+            - VerifierStrategy verifier
+            + Problem(BuilderProblem builder)
+            + VerifierStrategy getVerificator(): VerifierStrategy
+            + void setVerificator(VerifierStrategy verificator)
+            + long getMemoryLimit(): long
+            + long getTimeout(): long
+            + Iterable<TestCase> getTestCases(): Iterable<TestCase>
+            + Iterator<TestCase> iterator()
+            + void forEach(Consumer<? super TestCase> action)
+            + Spliterator<TestCase> spliterator()
+        }
+
+        class TestCase {
+            - String input
+            - String expectedOutput
+            + TestCase(String input, String expectedOutput)
+            + String getInput(): String
+            + String getExpectedOutput(): String
+        }
+
+        BuilderProblem --> Problem
+        Problem --> VerifierStrategy
+        Problem --> TestCase
+  }
+
+  package main {
+  class Main {
+  + main(String[] args): void
+  }
+  }
+
+  Runner --> Main
+  }
+  @enduml
 ## Diagramme de classes
 
 ```plantuml
@@ -357,14 +627,15 @@ Bomb --> Explosion : << utilise >>
 
 ### TP n°3
 
-| Fonctionnalité                         | Terminée ? | Auteur(s)                         |
-|----------------------------------------|------------|-----------------------------------|
-| Représentation des ennemis             | Oui        | Clément Goustiaux                 |
-| Intégration des ennemis dans la partie | Oui        | Clément Goustiaux                 |
-| Représentation du joueur               | Oui        | Rousseau Rayane                   |
-| Intégration du joueur dans la partie   | Oui        | Rousseau Rayane                   |
-| Représentation des bombes et explosion | Oui        | Samuel TITTELEIN                  |
-| Intégration des bombes dans la partie  | Oui        | Etienne Focquet, Samuel Tittelein |
-| Création de la carte du jeu            | Oui        | Etienne Focquet                   |
-| Fixation des bugs                      | Oui        | (tous le groupe)                  |
-| Mise à jour du README.md               | Oui        | Samuel TITTELEIN, Rousseau Rayane |
+| Fonctionnalité                                                | Terminée ? | Auteur(s)                         |
+|---------------------------------------------------------------|------------|-----------------------------------|
+| Représentation des ennemis                                    | Oui        | Clément Goustiaux                 |
+| Intégration des ennemis dans la partie                        | Oui        | Clément Goustiaux                 |
+| Représentation du joueur                                      | Oui        | Rousseau Rayane                   |
+| Intégration du joueur dans la partie                          | Oui        | Rousseau Rayane                   |
+| Représentation des bombes et explosion                        | Oui        | Samuel TITTELEIN                  |
+| Intégration des bombes dans la partie                         | Oui        | Etienne Focquet, Samuel Tittelein |
+| Création de la carte du jeu                                   | Oui        | Etienne Focquet                   |
+| Fixation des bugs                                             | Oui        | (tous le groupe)                  |
+| Mise à jour du README.md                                      | Oui        | Samuel TITTELEIN, Rousseau Rayane |
+| Variation des déplacements / Patron de conception *Stratégie* | Non        | Rousseau Rayane                   |
