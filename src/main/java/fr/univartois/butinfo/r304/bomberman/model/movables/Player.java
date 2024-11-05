@@ -3,6 +3,7 @@ package fr.univartois.butinfo.r304.bomberman.model.movables;
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
@@ -13,7 +14,7 @@ import javafx.collections.ObservableList;
 
 public class Player extends AbstractMovable {
 
-    private final ObservableList<Bomb> bombs = FXCollections.observableArrayList();
+    private final ObservableList<IBomb> bombs = FXCollections.observableArrayList();
     private final IntegerProperty score;
     private final IntegerProperty lives;
 
@@ -46,7 +47,7 @@ public class Player extends AbstractMovable {
         bombs.add(bomb);
     }
 
-    public ObservableList<Bomb> getBombs() {
+    public ObservableList<IBomb> getBombs() {
         return bombs;
     }
 

@@ -13,7 +13,7 @@ import java.util.Objects;
 
 import static java.lang.System.currentTimeMillis;
 
-public class Bomb extends AbstractMovable {
+public class Bomb extends AbstractMovable implements IBomb{
 
     public static final long BOMB_LIFESPAN = 1700; // Durée de vie de 1.7 secondes
     public static final SpriteStore spriteStore = new SpriteStore();
@@ -27,15 +27,16 @@ public class Bomb extends AbstractMovable {
      * @param game Le jeu Bomberman auquel cette bombe est liée.
      * @param xPosition La position en X où la bombe est placée.
      * @param yPosition La position en Y où la bombe est placée.
-     * @param explosionSprite Le sprite de l'explosion qui sera affiché après l'explosion.
+     * @param bombSprite Le sprite de l'explosion qui sera affiché après l'explosion.
      * @param explosionSize La taille de l'explosion (en nombre de cases).
      * <p>
      * L'attribut sprite est par défaut initialisé par {@link SpriteStore}
      * avec pour sprite le sprite "bomb".
      * </p>
      */
-    public Bomb(BombermanGame game, double xPosition, double yPosition, Sprite explosionSprite, int explosionSize) {
-        super(game, xPosition, yPosition, explosionSprite);
+    public Bomb(BombermanGame game, double xPosition, double yPosition,
+            Sprite bombSprite, int explosionSize) {
+        super(game, xPosition, yPosition, bombSprite);
         this.explosionSize = explosionSize;
     }
 
@@ -160,6 +161,10 @@ public class Bomb extends AbstractMovable {
 
     }
 
+    @Override
+    public BombermanGame getGame() {
+        return game;
+    }
 
     public void drop(Cell cell) {
         timeWhenDropped = currentTimeMillis();
@@ -173,6 +178,15 @@ public class Bomb extends AbstractMovable {
         game.addMovable(this);
     }
 
+    @Override
+    public int getExplosionSize() {
+        return explosionSize;
+    }
+
+    @Override
+    public Sprite getBombSprite() {
+        return super.getSprite();
+    }
 
     @Override
     public boolean equals(Object object) {
