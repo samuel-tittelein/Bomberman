@@ -1,6 +1,5 @@
 /**
  * Ce logiciel est distribué à des fins éducatives.
- *
  * Il est fourni "tel quel", sans garantie d’aucune sorte, explicite
  * ou implicite, notamment sans garantie de qualité marchande, d’adéquation
  * à un usage particulier et d’absence de contrefaçon.
@@ -9,7 +8,6 @@
  * soit dans le cadre d’un contrat, d’un délit ou autre, en provenance de,
  * consécutif à ou en relation avec le logiciel ou son utilisation, ou avec
  * d’autres éléments du logiciel.
- *
  * (c) 2022-2024 Romain Wallon - Université d'Artois.
  * Tous droits réservés.
  */
@@ -41,7 +39,6 @@ public abstract class AbstractMovable implements IMovable {
      * La marge de sécurité pour les obstacles (en pixels).
      */
     private static final int MARGIN = 5;
-
     /**
      * Le jeu dans lequel cet objet évolue.
      */
@@ -335,12 +332,9 @@ public abstract class AbstractMovable implements IMovable {
             return true;
         }
 
-        if (game.getCellAt(x + getWidth() - MARGIN, y + getHeight() - MARGIN).getWall() != null) {
-            // Le coin inférieur droit de l'objet a atteint un mur.
-            return true;
-        }
-
-        return false;
+        // Le coin inférieur droit de l'objet a atteint un mur.
+        return game.getCellAt(x + getWidth() - MARGIN, y + getHeight() - MARGIN)
+                       .getWall() != null;
     }
 
     /*
@@ -358,8 +352,8 @@ public abstract class AbstractMovable implements IMovable {
             return false;
         }
 
-        Rectangle rectangle = new Rectangle(getX(), getY(), getWidth(), getHeight());
-        return rectangle.intersects(other.getX(), other.getY(), other.getWidth(), other.getHeight());
+        Rectangle rectangle = new Rectangle(getX() + (double) MARGIN, getY() + (double) MARGIN, getWidth() - (double) MARGIN, getHeight() - (double) MARGIN);
+        return rectangle.intersects(other.getX() + (double) MARGIN, other.getY() + (double) MARGIN, other.getWidth() - (double) MARGIN, other.getHeight() - (double) MARGIN);
     }
 
     /*
