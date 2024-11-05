@@ -224,10 +224,10 @@ public final class BombermanGame {
             // Définir une stratégie de mouvement aléatoire ou de poursuite selon l'index
             if (i % 2 == 0) {
                 // Ennemis avec déplacement aléatoire classique (5% de chance de changer de direction)
-                enemy.setMovementStrategy(new RandomMovementStrategy(5, null, false, 0));
+                enemy.setMovementStrategy(new RandomMovementStrategy(5, null, false, 0, this));
             } else {
-                // Ennemis avec poursuite du joueur (Suivi avec une vitesse de 50. Cours Forest, cours !)
-                enemy.setMovementStrategy(new RandomMovementStrategy(0, player, true, 50));
+                // Ennemis avec poursuite du joueur (Suivi avec une vitesse de 50)
+                enemy.setMovementStrategy(new RandomMovementStrategy(0, player, true, 50, this));
             }
 
             movableObjects.add(enemy);
