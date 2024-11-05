@@ -19,7 +19,7 @@ public class GameMapGenerator {
                 if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) { // Bordures
                     Cell indestructibleWall = new Cell(new Wall(State.INDESTRUCTIBLE));
                     map.setAt(i, j, indestructibleWall);
-                } else if (Math.random() < 0.2) { // Mur aléatoire avec probabilité de 20%
+                } else if (Math.random() < 0.05) { // Mur aléatoire avec probabilité de 20%
                     Cell wall = new Cell(new Wall(DEFAULT_WALL_STATE));
                     map.setAt(i, j, wall);
                 } else {
