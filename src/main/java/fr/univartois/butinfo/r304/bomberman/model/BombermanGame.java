@@ -42,7 +42,7 @@ public final class BombermanGame {
     // Constantes pour la position initiale du joueur. (à modifier potentiellement plus tard)
     public static final double PLAYER_INITIAL_X = 100.0;  // Position initiale en X
     public static final double PLAYER_INITIAL_Y = 100.0;  // Position initiale en Y
-    private static final IMapGenerator MAP_CREATOR = new MapCroixGenerator();
+    private static final IMapGenerator MAP_CREATOR = new GridMapGenerator();
     /**
      * Le génarateur de nombres aléatoires utilisé dans le jeu.
      */
