@@ -26,6 +26,7 @@ import fr.univartois.butinfo.r304.bomberman.model.map.GameMapGenerator;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Enemy;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.strategy.RandomMovementStrategy;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.animation.AnimationTimer;
@@ -219,7 +220,7 @@ public final class BombermanGame {
         // Création des ennemis sur la carte.
         for (int i = 0; i < nbEnemies; i++) {
             Enemy enemy = new Enemy(this, 0, 0, spriteStore.getSprite("goblin"));
-            enemy.setHorizontalSpeed(DEFAULT_SPEED);
+            enemy.setMovementStrategy(new RandomMovementStrategy()); // Définit la stratégie de mouvement
             movableObjects.add(enemy);
             spawnMovable(enemy);
         }
