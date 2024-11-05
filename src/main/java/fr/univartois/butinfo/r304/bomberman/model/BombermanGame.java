@@ -217,10 +217,19 @@ public final class BombermanGame {
         }
 
 
-        // Création des ennemis sur la carte.
+        // Création des ennemis sur la carte avec différents comportements de déplacement
         for (int i = 0; i < nbEnemies; i++) {
             Enemy enemy = new Enemy(this, 0, 0, spriteStore.getSprite("goblin"));
-            enemy.setMovementStrategy(new RandomMovementStrategy(5)); // Définit la stratégie de mouvement. Ici, j'ai mis 50% de chance de changer de direction.
+
+            // Définir une stratégie de mouvement aléatoire ou de poursuite selon l'index
+            if (i % 2 == 0) {
+                // Ennemis avec déplacement aléatoire classique (5% de chance de changer de direction)
+                enemy.setMovementStrategy(new RandomMovementStrategy(5, null, false, 0));
+            } else {
+                // Ennemis avec poursuite du joueur (Suivi avec une vitesse de 50. Cours Forest, cours !)
+                enemy.setMovementStrategy(new RandomMovementStrategy(0, player, true, 50));
+            }
+
             movableObjects.add(enemy);
             spawnMovable(enemy);
         }
