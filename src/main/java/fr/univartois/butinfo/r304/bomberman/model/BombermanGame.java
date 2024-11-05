@@ -16,6 +16,7 @@
 
 package fr.univartois.butinfo.r304.bomberman.model;
 
+import fr.univartois.butinfo.r304.bomberman.model.movables.EnemyHPDecorator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -219,8 +220,9 @@ public final class BombermanGame {
         for (int i = 0; i < nbEnemies; i++) {
             Enemy enemy = new Enemy(this, 0, 0, spriteStore.getSprite("goblin"));
             enemy.setHorizontalSpeed(DEFAULT_SPEED);
-            movableObjects.add(enemy);
-            spawnMovable(enemy);
+            EnemyHPDecorator decEnemy = new EnemyHPDecorator(3, this, enemy);
+            movableObjects.add(decEnemy);
+            spawnMovable(decEnemy);
         }
     }
 
