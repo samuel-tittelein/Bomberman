@@ -220,7 +220,7 @@ public final class BombermanGame {
         // Création des ennemis sur la carte.
         for (int i = 0; i < nbEnemies; i++) {
             Enemy enemy = new Enemy(this, 0, 0, spriteStore.getSprite("goblin"));
-            enemy.setMovementStrategy(new RandomMovementStrategy()); // Définit la stratégie de mouvement
+            enemy.setMovementStrategy(new RandomMovementStrategy(5)); // Définit la stratégie de mouvement. Ici, j'ai mis 50% de chance de changer de direction.
             movableObjects.add(enemy);
             spawnMovable(enemy);
         }
