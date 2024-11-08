@@ -1,6 +1,7 @@
 package fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs;
 
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
+import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
@@ -9,11 +10,11 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 
-public abstract class AbstractBombDecorateur implements IBomb {
+public abstract class AbstractBombDecorator implements IBomb {
     protected SpriteStore spritestore = new SpriteStore();
-    protected IBomb bomb;
+    protected Bomb bomb;
 
-    public AbstractBombDecorateur(Bomb bomb) {
+    public AbstractBombDecorator(Bomb bomb) {
         this.bomb = bomb;
     }
 
@@ -132,7 +133,6 @@ public abstract class AbstractBombDecorateur implements IBomb {
         bomb.collidedWith(other);
     }
 
-    @Override
     public void explode() {
         bomb.explode();
     }
@@ -155,5 +155,15 @@ public abstract class AbstractBombDecorateur implements IBomb {
     @Override
     public void setExplosionSize(int size) {
         bomb.setExplosionSize(size);
+    }
+
+    @Override
+    public void drop(Cell cell) {
+        bomb.drop(cell);
+    }
+
+    @Override
+    public long getTimeWhenDropped() {
+        return bomb.getTimeWhenDropped();
     }
 }

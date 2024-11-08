@@ -40,6 +40,10 @@ public class Bomb extends AbstractMovable implements IBomb{
         this.explosionSize = explosionSize;
     }
 
+    public Bomb(BombermanGame game, double xPosition, double yPosition, int explosionSize) {
+        this(game, xPosition, yPosition, spriteStore.getSprite("bomb"), explosionSize);
+    }
+
 
     /**
      * Gère le déplacement de la bombe. Si le temps écoulé depuis le dépôt de la bombe dépasse
@@ -76,6 +80,7 @@ public class Bomb extends AbstractMovable implements IBomb{
      */
     @Override
     public void explode() {
+        System.out.println("fuck");
         game.addMovable(new Explosion(game, getX(), getY()));
 
         for (int direction = 0; direction < 4; direction++) {
@@ -194,6 +199,11 @@ public class Bomb extends AbstractMovable implements IBomb{
     }
 
     @Override
+    public long getTimeWhenDropped() {
+        return this.timeWhenDropped;
+    }
+
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
@@ -205,5 +215,9 @@ public class Bomb extends AbstractMovable implements IBomb{
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), timeWhenDropped, explosionSize);
+    }
+
+    public BombermanGame getGame() {
+        return game;
     }
 }

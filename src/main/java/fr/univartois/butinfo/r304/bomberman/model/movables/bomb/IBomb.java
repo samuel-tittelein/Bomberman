@@ -6,6 +6,8 @@ import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 
 public interface IBomb extends IMovable {
     void drop(Cell cell);
+
+    void explode();
     int getExplosionSize();
     void setExplosionSize(int size);
 
@@ -13,5 +15,6 @@ public interface IBomb extends IMovable {
     Sprite getBombSprite();
 
     void setSprite(Sprite sprite);
+    long getTimeWhenDropped();
 
 }
