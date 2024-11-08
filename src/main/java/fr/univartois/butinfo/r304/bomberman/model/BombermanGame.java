@@ -26,6 +26,7 @@ import fr.univartois.butinfo.r304.bomberman.model.movables.Enemy;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.LargeBomb;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.animation.AnimationTimer;
@@ -212,10 +213,13 @@ public final class BombermanGame {
         spawnMovable(player);
 
         // Ajout des bombes initiales pour le joueur.
+        player.addBomb(new LargeBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3)));
+
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
             Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3); // Taille de l'explosion fixée à 3
             player.addBomb(bomb);
         }
+        player.addBomb(new LargeBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3)));
 
 
         // Création des ennemis sur la carte.

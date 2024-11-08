@@ -17,7 +17,7 @@ public class Bomb extends AbstractMovable implements IBomb{
 
     public static final long BOMB_LIFESPAN = 1700; // Durée de vie de 1.7 secondes
     public static final SpriteStore spriteStore = new SpriteStore();
-    private final int explosionSize;
+    private int explosionSize;
     private long timeWhenDropped;
 
 
@@ -161,11 +161,6 @@ public class Bomb extends AbstractMovable implements IBomb{
 
     }
 
-    @Override
-    public BombermanGame getGame() {
-        return game;
-    }
-
     public void drop(Cell cell) {
         timeWhenDropped = currentTimeMillis();
 
@@ -181,6 +176,16 @@ public class Bomb extends AbstractMovable implements IBomb{
     @Override
     public int getExplosionSize() {
         return explosionSize;
+    }
+
+    @Override
+    public void setExplosionSize(int size) {
+        this.explosionSize = size;
+    }
+
+    @Override
+    public void setBombSprite(Sprite sprite) {
+        super.setSprite(sprite);
     }
 
     @Override

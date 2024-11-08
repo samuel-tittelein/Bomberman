@@ -2,7 +2,6 @@ package fr.univartois.butinfo.r304.bomberman.model.movables;
 
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
-import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.beans.binding.Bindings;
@@ -43,7 +42,7 @@ public class Player extends AbstractMovable {
         return Bindings.size(this.bombs);
     }
 
-    public void addBomb(Bomb bomb) {
+    public void addBomb(IBomb bomb) {
         bombs.add(bomb);
     }
 
