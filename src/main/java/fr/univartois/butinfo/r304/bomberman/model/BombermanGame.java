@@ -29,6 +29,8 @@ import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.HorizontalBomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.LargeBomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.VerticalBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.strategy.ChaseMovementStrategy;
+import fr.univartois.butinfo.r304.bomberman.model.movables.strategy.RandomMovementStrategy;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.animation.AnimationTimer;
@@ -216,28 +218,36 @@ public final class BombermanGame {
 
         // Ajout des bombes initiales pour le joueur.
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
-            //ajoute une bombe horizontale
+            // ajoute une bombe horizontale
             player.addBomb(new HorizontalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
-            //ajoute une bombe verticale
+            // ajoute une bombe verticale
             player.addBomb(new VerticalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
-            //ajoute une bombe normale avec pour taille par défaut 3
+            // ajoute une bombe normale avec pour taille par défaut 3
             Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3); // Taille de l'explosion fixée à 3
             player.addBomb(bomb);
-            //ajoute une grosse bombe (taille par défaut 8)
+            // ajoute une grosse bombe (taille par défaut 8)
             player.addBomb(new LargeBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), 3)));
-
         }
 
-
-        // Création des ennemis sur la carte.
+        // Création des ennemis avec des stratégies de déplacement
         for (int i = 0; i < nbEnemies; i++) {
             Enemy enemy = new Enemy(this, 0, 0, spriteStore.getSprite("goblin"));
-            enemy.setHorizontalSpeed(DEFAULT_SPEED);
-            EnemyHPDecorator decEnemy = new EnemyHPDecorator(3, this, enemy);
-            movableObjects.add(decEnemy);
-            spawnMovable(decEnemy);
+
+            if (i % 2 == 0) {
+                // Ennemi avec mouvement aléatoire
+                enemy.setMovementStrategy(new RandomMovementStrategy(5, this)); // Ajuste le 5 selon le pourcentage souhaité de changement de direction
+            } else {
+                // Ennemi agressif
+                enemy.setMovementStrategy(new ChaseMovementStrategy(player, this));
+            }
+
+            // Décorateur pour ajouter des points de vie à l'ennemi
+            EnemyHPDecorator decoratedEnemy = new EnemyHPDecorator(3, this, enemy);
+            movableObjects.add(decoratedEnemy);
+            spawnMovable(decoratedEnemy);
         }
     }
+
 
 
 
