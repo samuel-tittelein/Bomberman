@@ -3,9 +3,10 @@ import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Explosion;
 
-import static fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb.BOMB_LIFESPAN;
-import static java.lang.System.currentTimeMillis;
-
+/**
+ * This class decorate Bomb
+ * it implement the horizontal bomb that explode all the row if there are no wall.
+ */
 public class HorizontalBomb extends AbstractBombDecorator {
 
     public HorizontalBomb(Bomb bomb) {
@@ -18,20 +19,14 @@ public class HorizontalBomb extends AbstractBombDecorator {
         setExplosionSize(100);
     }
 
-    @Override
-    public boolean move(long timeDelta) {
-        long elapsedTime = currentTimeMillis() - getTimeWhenDropped();
-        if (elapsedTime > BOMB_LIFESPAN) {
-            this.explode(); // Déclenche l'explosion si le temps est écoulé
-        }
-        return true;
-    }
 
     @Override
     public void explode() {
         BombermanGame game = bomb.getGame();
         game.addMovable(new Explosion(game, getX(), getY()));
+        //spread the explosion to the right
         bomb.spreadExplosion(0, getX(), getY(), 0, getHeight());
+        //spread the explosion to the left
         bomb.spreadExplosion(1, getX(), getY(), 0, getHeight());
         game.removeMovable(this);
     }

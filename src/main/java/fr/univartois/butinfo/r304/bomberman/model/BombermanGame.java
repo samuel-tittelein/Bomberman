@@ -216,15 +216,17 @@ public final class BombermanGame {
 
         // Ajout des bombes initiales pour le joueur.
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
-            player.addBomb(new HorizontalBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), 3)));
-            player.addBomb(new VerticalBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), 3)));
-
+            //ajoute une bombe horizontale
+            player.addBomb(new HorizontalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
+            //ajoute une bombe verticale
+            player.addBomb(new VerticalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
+            //ajoute une bombe normale avec pour taille par défaut 3
             Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3); // Taille de l'explosion fixée à 3
             player.addBomb(bomb);
+            //ajoute une grosse bombe (taille par défaut 8)
             player.addBomb(new LargeBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), 3)));
 
         }
-        player.addBomb(new LargeBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3)));
 
 
         // Création des ennemis sur la carte.

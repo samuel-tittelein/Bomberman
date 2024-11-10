@@ -1,7 +1,11 @@
 package fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
 
-
+/**
+ * This class decorate Bomb
+ * it implement the large bomb (it explosion size is 2 times the explosion size of a normal bomb)
+ * when it's dropped, it displays large-bomb.png
+ */
 public class LargeBomb extends AbstractBombDecorator {
 
     public LargeBomb(Bomb bomb) {
@@ -11,8 +15,6 @@ public class LargeBomb extends AbstractBombDecorator {
 
     private void decorate() {
         setBombSprite(spritestore.getSprite("large-bomb"));
-        setExplosionSize(8);
+        setExplosionSize(2*getExplosionSize());
     }
-
-
 }
