@@ -25,6 +25,7 @@ import fr.univartois.butinfo.r304.bomberman.model.map.*;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Enemy;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.strategy.ChaseMovementStrategy;
 import fr.univartois.butinfo.r304.bomberman.model.movables.strategy.RandomMovementStrategy;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
@@ -225,23 +226,22 @@ public final class BombermanGame {
 
         }
 
-
-        // Création des ennemis sur la carte avec différents comportements de déplacement
+        // Création des ennemis avec des stratégies de déplacement
         for (int i = 0; i < nbEnemies; i++) {
             Enemy enemy = new Enemy(this, 0, 0, spriteStore.getSprite("goblin"));
 
-            // Définir une stratégie de mouvement aléatoire ou de poursuite selon l'index
             if (i % 2 == 0) {
-                // Ennemis avec déplacement aléatoire classique (5% de chance de changer de direction)
-                enemy.setMovementStrategy(new RandomMovementStrategy(5, null, false, 0, this));
+                // Ennemi avec mouvement aléatoire
+                enemy.setMovementStrategy(new RandomMovementStrategy(5, this)); // Ajuste le 5 selon le pourcentage souhaité de changement de direction
             } else {
-                // Ennemis avec poursuite du joueur (Suivi avec une vitesse de 50)
-                enemy.setMovementStrategy(new RandomMovementStrategy(0, player, true, 50, this));
+                // Ennemi agressif
+                enemy.setMovementStrategy(new ChaseMovementStrategy(player, this));
             }
 
             movableObjects.add(enemy);
             spawnMovable(enemy);
         }
+
     }
 
 

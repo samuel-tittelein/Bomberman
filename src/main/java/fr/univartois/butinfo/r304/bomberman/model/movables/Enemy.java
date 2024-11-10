@@ -4,11 +4,8 @@ import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.movables.strategy.MovementStrategy;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
-import java.util.Random;
 
 public class Enemy extends AbstractMovable {
-
-  private static final Random RANDOM = new Random();
 
   // Attribut pour la stratégie de mouvement
   private MovementStrategy movementStrategy;
