@@ -1,6 +1,6 @@
 package fr.univartois.butinfo.r304.bomberman.model.map;
 //36 - 24
-import fr.univartois.butinfo.r304.bomberman.model.map.walls.State.State;
+import fr.univartois.butinfo.r304.bomberman.model.map.walls.state.State;
 import fr.univartois.butinfo.r304.bomberman.model.map.walls.Wall;
 import static fr.univartois.butinfo.r304.bomberman.model.map.DefaultMapGenerator.DEFAULT_WALL_STATE;
 public class  GridMapGenerator extends MapGeneratorDecorator {
