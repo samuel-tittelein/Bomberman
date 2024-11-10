@@ -4,5 +4,5 @@ public enum State {
     INDESTRUCTIBLE,
     INTACT,
     DEGRADED,
-    BROKEN;
+    BROKEN
 }
