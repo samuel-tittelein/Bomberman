@@ -25,6 +25,10 @@ import fr.univartois.butinfo.r304.bomberman.model.map.*;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Enemy;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.HorizontalBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.LargeBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.VerticalBomb;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.animation.AnimationTimer;
@@ -43,7 +47,7 @@ public final class BombermanGame {
     // Constantes pour la position initiale du joueur. (à modifier potentiellement plus tard)
     public static final double PLAYER_INITIAL_X = 100.0;  // Position initiale en X
     public static final double PLAYER_INITIAL_Y = 100.0;  // Position initiale en Y
-    private static final IMapGenerator MAP_CREATOR = new MapCroixGenerator();
+    private static final IMapGenerator MAP_CREATOR = new RandomMapGenerator();
     /**
      * Le génarateur de nombres aléatoires utilisé dans le jeu.
      */
@@ -212,8 +216,16 @@ public final class BombermanGame {
 
         // Ajout des bombes initiales pour le joueur.
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
+            //ajoute une bombe horizontale
+            player.addBomb(new HorizontalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
+            //ajoute une bombe verticale
+            player.addBomb(new VerticalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
+            //ajoute une bombe normale avec pour taille par défaut 3
             Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3); // Taille de l'explosion fixée à 3
             player.addBomb(bomb);
+            //ajoute une grosse bombe (taille par défaut 8)
+            player.addBomb(new LargeBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), 3)));
+
         }
 
 
@@ -314,7 +326,7 @@ public final class BombermanGame {
      *
      * @param bomb La bombe à déposer.
      */
-    public void dropBomb(Bomb bomb) {
+    public void dropBomb(IBomb bomb) {
         bomb.drop(getCellOf(player));
     }
 
