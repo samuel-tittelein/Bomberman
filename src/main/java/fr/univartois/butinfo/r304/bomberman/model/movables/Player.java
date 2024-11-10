@@ -22,7 +22,7 @@ public class Player extends AbstractMovable {
     private final ObservableList<IBomb> bombs = FXCollections.observableArrayList();
     private final IntegerProperty score;
     private final IntegerProperty lives;
-    private PlayerState state;  // État actuel du joueur
+    private PlayerState state; // État actuel du joueur
 
     private final Sprite originalAppearance;
     private final Sprite invulnerableAppearance;
@@ -30,10 +30,10 @@ public class Player extends AbstractMovable {
     /**
      * Crée une nouvelle instance de {@link Player}.
      *
-     * @param game Le jeu auquel appartient le joueur.
-     * @param xPosition La position initiale en x.
-     * @param yPosition La position initiale en y.
-     * @param sprite Apparence normale du joueur.
+     * @param game               Le jeu auquel appartient le joueur.
+     * @param xPosition          La position initiale en x.
+     * @param yPosition          La position initiale en y.
+     * @param sprite             Apparence normale du joueur.
      * @param invulnerableSprite Apparence du joueur en état d'invulnérabilité.
      */
     public Player(BombermanGame game, double xPosition, double yPosition, Sprite sprite, Sprite invulnerableSprite) {
@@ -89,6 +89,12 @@ public class Player extends AbstractMovable {
         return lives.get();
     }
 
+    /**
+     * Réduit les points de vie du joueur.
+     * Si les points de vie tombent à zéro ou en dessous, la partie se termine.
+     *
+     * @param points Le nombre de points de vie à retirer.
+     */
     public void decreaseLives(int points) {
         this.lives.set(this.lives.get() - points);
         if (lives.get() <= 0) {
@@ -98,13 +104,11 @@ public class Player extends AbstractMovable {
 
     @Override
     public void explode() {
-        // Applique les dommages via le système d'état
         takeDamage();
     }
 
     @Override
     public void hitEnemy() {
-        // Applique les dommages via le système d'état
         takeDamage();
     }
 
@@ -112,29 +116,25 @@ public class Player extends AbstractMovable {
     public void collidedWith(IMovable other) {
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-
     /**
-     * Modifie l'état du joueur.
+     * Modifie l'état actuel du joueur.
      *
-     * @param newState Le nouvel état à appliquer.
+     * @param newState Le nouvel état du joueur.
      */
     public void setState(PlayerState newState) {
         this.state = newState;
+        updateAppearance(); // Met à jour immédiatement l'apparence pour refléter le nouvel état
     }
 
     /**
-     * Applique des dommages au joueur selon son état actuel.
+     * Applique des dommages au joueur en fonction de son état actuel.
      */
     public void takeDamage() {
         state.takeDamage(this);
     }
 
     /**
-     * Met à jour l'apparence du joueur en fonction de son état.
+     * Met à jour l'apparence du joueur en fonction de son état actuel.
      */
     public void updateAppearance() {
         state.updateAppearance(this);
@@ -143,27 +143,18 @@ public class Player extends AbstractMovable {
     /**
      * Obtient l'apparence normale du joueur.
      *
-     * @return L'apparence d'origine du joueur.
+     * @return Le sprite représentant l'apparence normale.
      */
     public Sprite getOriginalAppearance() {
         return originalAppearance;
     }
 
     /**
-     * Obtient l'apparence du joueur lorsqu'il est invulnérable.
+     * Obtient l'apparence invulnérable du joueur.
      *
-     * @return L'apparence du joueur en état d'invulnérabilité.
+     * @return Le sprite représentant l'apparence invulnérable.
      */
     public Sprite getInvulnerableAppearance() {
         return invulnerableAppearance;
-    }
-
-    /**
-     * Définit l'apparence actuelle du joueur.
-     *
-     * @param appearance Le sprite représentant l'apparence actuelle du joueur.
-     */
-    public void setAppearance(Sprite appearance) {
-        this.setSprite(appearance);
     }
 }

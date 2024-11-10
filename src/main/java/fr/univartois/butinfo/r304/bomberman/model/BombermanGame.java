@@ -211,8 +211,12 @@ public final class BombermanGame {
         clearAllMovables();
 
         // Création et placement du joueur sur la carte.
-        Sprite playerSprite = spriteStore.getSprite("guy"); // Le joueur prend le skin "guy"
-        player = new Player(this, PLAYER_INITIAL_X, PLAYER_INITIAL_Y, playerSprite);
+        Sprite playerSprite = spriteStore.getSprite("guy"); // Sprite normal
+        Sprite invulnerableSprite = spriteStore.getSprite("guy_invulnerable"); // Sprite pour l'invulnérabilité
+
+        // Initialisation du joueur avec le sprite normal et invulnérable
+        player = new Player(this, PLAYER_INITIAL_X, PLAYER_INITIAL_Y, playerSprite, invulnerableSprite);
+
         movableObjects.add(player);
         spawnMovable(player);
 

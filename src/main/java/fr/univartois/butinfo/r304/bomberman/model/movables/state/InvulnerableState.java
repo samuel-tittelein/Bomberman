@@ -20,14 +20,17 @@ public class InvulnerableState implements PlayerState {
 
     @Override
     public void takeDamage(Player player) {
-        // Aucun effet car le joueur est invulnérable
+        // Aucun effet, le joueur est invulnérable
     }
 
     @Override
     public void updateAppearance(Player player) {
-        player.setAppearance(player.getInvulnerableAppearance()); // Apparence spéciale d'invulnérabilité
+        player.setSprite(player.getInvulnerableAppearance()); // Apparence spéciale d'invulnérabilité
+
+        // Si la durée d'invulnérabilité est écoulée, repasse à l'état vulnérable
         if (System.currentTimeMillis() - startTime >= VulnerableState.getInvulnerabilityDuration()) {
-            player.setState(new VulnerableState()); // Retour à l'état vulnérable après la durée définie
+            player.setState(new VulnerableState()); // Retour à l'état vulnérable
+            player.updateAppearance(); // Mise à jour immédiate de l'apparence
         }
     }
 }
