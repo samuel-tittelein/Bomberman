@@ -28,6 +28,7 @@ import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.HorizontalBomb;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.LargeBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.VerticalBomb;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.animation.AnimationTimer;
@@ -216,6 +217,7 @@ public final class BombermanGame {
         // Ajout des bombes initiales pour le joueur.
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
             player.addBomb(new HorizontalBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), 3)));
+            player.addBomb(new VerticalBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), 3)));
 
             Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3); // Taille de l'explosion fixée à 3
             player.addBomb(bomb);
