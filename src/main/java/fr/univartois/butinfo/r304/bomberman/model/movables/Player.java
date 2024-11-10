@@ -2,8 +2,10 @@ package fr.univartois.butinfo.r304.bomberman.model.movables;
 
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
-import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -11,9 +13,9 @@ import javafx.collections.ObservableList;
 
 public class Player extends AbstractMovable {
 
-    private final ObservableList<Bomb> bombs = FXCollections.observableArrayList();
-    private IntegerProperty score;
-    private IntegerProperty lives;
+    private final ObservableList<IBomb> bombs = FXCollections.observableArrayList();
+    private final IntegerProperty score;
+    private final IntegerProperty lives;
 
     private long lastHitTime = 0; // Timestamp pour le cooldown de collision
     private static final int COOLDOWN_TIME = 3000; // 3 secondes de cooldown (sinon il perd trop de pdv trop rapidement)
@@ -22,10 +24,6 @@ public class Player extends AbstractMovable {
         super(game, xPosition, yPosition, sprite);
         this.score = new SimpleIntegerProperty(0);
         this.lives = new SimpleIntegerProperty(3);
-    }
-
-    public IntegerProperty scoreProperty() {
-        return score;
     }
 
     public IntegerProperty getLivesProperty() {
@@ -40,15 +38,15 @@ public class Player extends AbstractMovable {
         this.score.set(this.score.get() + points);
     }
 
-    public IntegerProperty getBombsProperty() {
-        return new SimpleIntegerProperty(bombs.size());
+    public IntegerBinding getBombsProperty() {
+        return Bindings.size(this.bombs);
     }
 
-    public void addBomb(Bomb bomb) {
+    public void addBomb(IBomb bomb) {
         bombs.add(bomb);
     }
 
-    public ObservableList<Bomb> getBombs() {
+    public ObservableList<IBomb> getBombs() {
         return bombs;
     }
 
@@ -66,10 +64,6 @@ public class Player extends AbstractMovable {
 
     public void increaseScore(int points) {
         this.score.set(this.score.get() + points);
-    }
-
-    public IntegerProperty livesProperty() {
-        return lives;
     }
 
     public int getLives() {
@@ -103,17 +97,11 @@ public class Player extends AbstractMovable {
     }
 
     @Override
-    public boolean isEnemy() {
-        return super.isEnemy();
-    }
-
-    @Override
-    public boolean move(long delta) {
-        return super.move(delta);
-    }
-
-    @Override
     public void collidedWith(IMovable other) {
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

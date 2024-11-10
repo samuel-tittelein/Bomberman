@@ -16,6 +16,7 @@
 
 package fr.univartois.butinfo.r304.bomberman.model;
 
+import fr.univartois.butinfo.r304.bomberman.model.movables.EnemyHPDecorator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -24,6 +25,10 @@ import fr.univartois.butinfo.r304.bomberman.model.map.*;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Enemy;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.HorizontalBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.LargeBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.VerticalBomb;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.animation.AnimationTimer;
@@ -211,8 +216,16 @@ public final class BombermanGame {
 
         // Ajout des bombes initiales pour le joueur.
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
+            //ajoute une bombe horizontale
+            player.addBomb(new HorizontalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
+            //ajoute une bombe verticale
+            player.addBomb(new VerticalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
+            //ajoute une bombe normale avec pour taille par défaut 3
             Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3); // Taille de l'explosion fixée à 3
             player.addBomb(bomb);
+            //ajoute une grosse bombe (taille par défaut 8)
+            player.addBomb(new LargeBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), 3)));
+
         }
 
 
@@ -220,8 +233,9 @@ public final class BombermanGame {
         for (int i = 0; i < nbEnemies; i++) {
             Enemy enemy = new Enemy(this, 0, 0, spriteStore.getSprite("goblin"));
             enemy.setHorizontalSpeed(DEFAULT_SPEED);
-            movableObjects.add(enemy);
-            spawnMovable(enemy);
+            EnemyHPDecorator decEnemy = new EnemyHPDecorator(3, this, enemy);
+            movableObjects.add(decEnemy);
+            spawnMovable(decEnemy);
         }
     }
 
@@ -312,7 +326,7 @@ public final class BombermanGame {
      *
      * @param bomb La bombe à déposer.
      */
-    public void dropBomb(Bomb bomb) {
+    public void dropBomb(IBomb bomb) {
         bomb.drop(getCellOf(player));
     }
 
