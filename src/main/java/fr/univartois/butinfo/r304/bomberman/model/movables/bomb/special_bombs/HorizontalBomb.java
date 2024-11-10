@@ -20,7 +20,7 @@ public class HorizontalBomb extends AbstractBombDecorator {
 
     @Override
     public boolean move(long timeDelta) {
-        long elapsedTime = currentTimeMillis() - bomb.getTimeWhenDropped();
+        long elapsedTime = currentTimeMillis() - getTimeWhenDropped();
         if (elapsedTime > BOMB_LIFESPAN) {
             this.explode(); // Déclenche l'explosion si le temps est écoulé
         }
@@ -30,13 +30,9 @@ public class HorizontalBomb extends AbstractBombDecorator {
     @Override
     public void explode() {
         BombermanGame game = bomb.getGame();
-
-        //game.addMovable(new Explosion(game, getX(), getY()));
-
+        game.addMovable(new Explosion(game, getX(), getY()));
         bomb.spreadExplosion(0, getX(), getY(), 0, getHeight());
-        bomb.spreadExplosion(2, getX(), getY(), 0, getHeight());
-        System.out.println("ok");
-
+        bomb.spreadExplosion(1, getX(), getY(), 0, getHeight());
         game.removeMovable(this);
     }
 

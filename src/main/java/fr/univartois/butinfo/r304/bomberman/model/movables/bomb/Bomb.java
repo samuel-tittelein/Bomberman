@@ -21,6 +21,7 @@ public class Bomb extends AbstractMovable implements IBomb{
     private long timeWhenDropped;
 
 
+
     /**
      * Crée une nouvelle bombe avec un sprite spécifique et une taille d'explosion définie.
      *
@@ -80,7 +81,6 @@ public class Bomb extends AbstractMovable implements IBomb{
      */
     @Override
     public void explode() {
-        System.out.println("fuck");
         game.addMovable(new Explosion(game, getX(), getY()));
 
         for (int direction = 0; direction < 4; direction++) {
@@ -196,6 +196,11 @@ public class Bomb extends AbstractMovable implements IBomb{
     @Override
     public Sprite getBombSprite() {
         return super.getSprite();
+    }
+
+    @Override
+    public void setTimeWhenDropped(long time) {
+        this.timeWhenDropped = time;
     }
 
     @Override

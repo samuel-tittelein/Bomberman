@@ -10,9 +10,12 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 
+import static java.lang.System.currentTimeMillis;
+
 public abstract class AbstractBombDecorator implements IBomb {
     protected SpriteStore spritestore = new SpriteStore();
     protected Bomb bomb;
+    private long timeWhenDropped;
 
     public AbstractBombDecorator(Bomb bomb) {
         this.bomb = bomb;
@@ -120,7 +123,12 @@ public abstract class AbstractBombDecorator implements IBomb {
 
     @Override
     public boolean move(long timeDelta) {
-        return bomb.move(timeDelta);
+        // Vérifie si le temps écoulé depuis le dépôt de la bombe dépasse BOMB_LIFESPAN
+        long elapsedTime = currentTimeMillis() - timeWhenDropped;
+        if (elapsedTime > Bomb.BOMB_LIFESPAN) {
+            explode(); // Déclenche l'explosion si le temps est écoulé
+        }
+        return true; // La bombe ne se déplace pas, donc toujours vrai
     }
 
     @Override
@@ -135,6 +143,7 @@ public abstract class AbstractBombDecorator implements IBomb {
 
     public void explode() {
         bomb.explode();
+        bomb.getGame().removeMovable(this);
     }
 
     @Override
@@ -159,11 +168,24 @@ public abstract class AbstractBombDecorator implements IBomb {
 
     @Override
     public void drop(Cell cell) {
-        bomb.drop(cell);
+        setTimeWhenDropped(currentTimeMillis());
+
+        int x = cell.getColumn() * cell.getWidth();
+        int y = cell.getRow() * cell.getHeight();
+
+        setX(x);
+        setY(y);
+
+        bomb.getGame().addMovable(this);
+    }
+
+    @Override
+    public void setTimeWhenDropped(long time) {
+        this.timeWhenDropped = time;
     }
 
     @Override
     public long getTimeWhenDropped() {
-        return bomb.getTimeWhenDropped();
+        return this.timeWhenDropped;
     }
 }

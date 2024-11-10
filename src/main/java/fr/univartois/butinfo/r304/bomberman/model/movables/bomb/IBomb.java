@@ -15,6 +15,9 @@ public interface IBomb extends IMovable {
     Sprite getBombSprite();
 
     void setSprite(Sprite sprite);
+
+    void setTimeWhenDropped(long time);
+
     long getTimeWhenDropped();
 
 }
