@@ -3,8 +3,6 @@ package fr.univartois.butinfo.r304.bomberman.model.movables;
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
-import fr.univartois.butinfo.r304.bomberman.model.movables.state.PlayerState;
-import fr.univartois.butinfo.r304.bomberman.model.movables.state.VulnerableState;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
@@ -15,14 +13,16 @@ import javafx.collections.ObservableList;
 
 /**
  * La classe {@link Player} représente le personnage joueur dans le jeu.
- * Elle gère les points de vie, le score, les bombes et les états d'invulnérabilité du joueur.
+ * Elle gère les points de vie, le score, les bombes et l'état temporaire d'invulnérabilité du joueur.
  */
 public class Player extends AbstractMovable {
 
     private final ObservableList<IBomb> bombs = FXCollections.observableArrayList();
     private final IntegerProperty score;
     private final IntegerProperty lives;
-    private PlayerState state; // État actuel du joueur
+
+    private long lastHitTime = 0; // Timestamp pour le dernier coup pris
+    private static final int COOLDOWN_TIME = 3000; // Durée d'invulnérabilité en ms
 
     private final Sprite originalAppearance;
     private final Sprite invulnerableAppearance;
@@ -38,7 +38,6 @@ public class Player extends AbstractMovable {
      */
     public Player(BombermanGame game, double xPosition, double yPosition, Sprite sprite, Sprite invulnerableSprite) {
         super(game, xPosition, yPosition, sprite);
-        this.state = new VulnerableState(); // État initial : vulnérable
         this.originalAppearance = sprite;
         this.invulnerableAppearance = invulnerableSprite;
         this.score = new SimpleIntegerProperty(0);
@@ -117,44 +116,31 @@ public class Player extends AbstractMovable {
     }
 
     /**
-     * Modifie l'état actuel du joueur.
-     *
-     * @param newState Le nouvel état du joueur.
-     */
-    public void setState(PlayerState newState) {
-        this.state = newState;
-        updateAppearance(); // Met à jour immédiatement l'apparence pour refléter le nouvel état
-    }
-
-    /**
-     * Applique des dommages au joueur en fonction de son état actuel.
+     * Applique des dommages au joueur en fonction de son invulnérabilité temporaire.
      */
     public void takeDamage() {
-        state.takeDamage(this);
+        long currentTime = System.currentTimeMillis();
+
+        // Si le cooldown est écoulé, le joueur prend des dégâts
+        if (currentTime - lastHitTime >= COOLDOWN_TIME) {
+            decreaseLives(1);
+            lastHitTime = currentTime; // Redémarre le cooldown
+            setSprite(invulnerableAppearance); // Change d'apparence
+
+            // Remet l'apparence originale après le cooldown
+            new Thread(() -> {
+                try {
+                    Thread.sleep(COOLDOWN_TIME);
+                    setSprite(originalAppearance);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
     }
 
-    /**
-     * Met à jour l'apparence du joueur en fonction de son état actuel.
-     */
-    public void updateAppearance() {
-        state.updateAppearance(this);
-    }
-
-    /**
-     * Obtient l'apparence normale du joueur.
-     *
-     * @return Le sprite représentant l'apparence normale.
-     */
-    public Sprite getOriginalAppearance() {
-        return originalAppearance;
-    }
-
-    /**
-     * Obtient l'apparence invulnérable du joueur.
-     *
-     * @return Le sprite représentant l'apparence invulnérable.
-     */
-    public Sprite getInvulnerableAppearance() {
-        return invulnerableAppearance;
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }
