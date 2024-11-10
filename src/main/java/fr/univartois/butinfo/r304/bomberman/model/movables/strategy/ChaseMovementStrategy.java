@@ -7,6 +7,14 @@ import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 
 import java.util.Random;
 
+/**
+ * La classe {@link ChaseMovementStrategy} représente une stratégie de mouvement pour un ennemi
+ * qui poursuit activement le joueur en ligne droite, mais essaie également d'éviter les obstacles.
+ * <p>
+ * Si l'ennemi est bloqué par un obstacle, il tente de contourner en prenant une direction
+ * perpendiculaire. En cas d'échec répété, il choisit une direction aléatoire pour se débloquer.
+ * </p>
+ */
 public class ChaseMovementStrategy implements MovementStrategy {
 
     private final Player player;
@@ -16,18 +24,30 @@ public class ChaseMovementStrategy implements MovementStrategy {
     private int failedAttempts = 0;
     private final Random random = new Random();
 
+    /**
+     * Initialise une nouvelle instance de {@link ChaseMovementStrategy}.
+     *
+     * @param player Le joueur que l'ennemi doit poursuivre.
+     * @param game   Le jeu dans lequel l'ennemi évolue.
+     */
     public ChaseMovementStrategy(Player player, BombermanGame game) {
         this.player = player;
         this.game = game;
     }
 
+    /**
+     * Calcule le mouvement de l'ennemi en direction du joueur.
+     * Si un obstacle est rencontré, il tente une direction alternative.
+     *
+     * @param enemy L'ennemi dont le mouvement doit être calculé.
+     */
     @Override
     public void calculateMovement(Enemy enemy) {
         double horizontalSpeed = 0;
         double verticalSpeed = 0;
         boolean moved;
 
-        // Calcule les distances vers le joueur
+        // Calcule la distance entre l'ennemi et le joueur
         double deltaX = player.getXPosition() - enemy.getX();
         double deltaY = player.getYPosition() - enemy.getY();
 
@@ -52,7 +72,7 @@ public class ChaseMovementStrategy implements MovementStrategy {
             }
         }
 
-        // Si l'ennemi est bloqué, essaie une direction aléatoire
+        // Si l'ennemi est bloqué, essaie une direction aléatoire après plusieurs échecs
         if (!moved) {
             failedAttempts++;
             if (failedAttempts >= MAX_BLOCKED_ATTEMPTS) {
@@ -66,6 +86,13 @@ public class ChaseMovementStrategy implements MovementStrategy {
         enemy.setVerticalSpeed(verticalSpeed);
     }
 
+    /**
+     * Tente une direction alternative lorsque la direction principale est bloquée.
+     *
+     * @param enemy            L'ennemi qui tente de se déplacer.
+     * @param primaryDirection La direction initiale (horizontal ou vertical).
+     * @return {@code true} si un mouvement alternatif est possible, sinon {@code false}.
+     */
     private boolean tryAlternativeDirections(Enemy enemy, String primaryDirection) {
         double horizontalSpeed = 0;
         double verticalSpeed = 0;
@@ -86,6 +113,13 @@ public class ChaseMovementStrategy implements MovementStrategy {
         return false;
     }
 
+    /**
+     * Vérifie si une cellule contient un obstacle dans la direction donnée.
+     *
+     * @param x La position en x de la cellule à vérifier.
+     * @param y La position en y de la cellule à vérifier.
+     * @return {@code true} si un obstacle est présent, sinon {@code false}.
+     */
     private boolean isObstacleInDirection(double x, double y) {
         if (x < 0 || x >= game.getWidth() || y < 0 || y >= game.getHeight()) {
             return false;
@@ -94,10 +128,18 @@ public class ChaseMovementStrategy implements MovementStrategy {
         return targetCell == null || targetCell.getWall() == null;
     }
 
+    /**
+     * Génère une direction aléatoire de +1 ou -1.
+     *
+     * @return 1 ou -1 pour indiquer la direction.
+     */
     private int getRandomDirection() {
         return random.nextBoolean() ? 1 : -1;
     }
 
+    /**
+     * Réinitialise le compteur d'échecs lorsque l'ennemi se déplace sans être bloqué.
+     */
     private void resetAttempts() {
         failedAttempts = 0;
     }
