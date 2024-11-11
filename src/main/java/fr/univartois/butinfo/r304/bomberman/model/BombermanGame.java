@@ -224,9 +224,6 @@ public final class BombermanGame {
         // Sélection d'une carte aléatoirement
         this.mapGenerator = generators.get(RANDOM.nextInt(generators.size()));
 
-        // Préparation de la carte et initialisation du jeu
-        prepare();
-
         createMovables();
         initStatistics();
         animation.start();
@@ -280,9 +277,6 @@ public final class BombermanGame {
             spawnMovable(decoratedEnemy);
         }
     }
-
-
-
 
     /**
      * Initialie les statistiques de cette partie.
