@@ -638,4 +638,16 @@ Bomb --> Explosion : << utilise >>
 | Création de la carte du jeu                                   | Oui        | Etienne Focquet                   |
 | Fixation des bugs                                             | Oui        | (tous le groupe)                  |
 | Mise à jour du README.md                                      | Oui        | Samuel TITTELEIN, Rousseau Rayane |
-| Variation des déplacements / Patron de conception *Stratégie* | Non        | Rousseau Rayane                   |
+
+## Tâches réalisées
+
+### TP n°4
+
+| Fonctionnalité                                                                          | Terminée ? | Auteur(s)                        |
+|-----------------------------------------------------------------------------------------|------------|----------------------------------|
+| Variation des déplacements / Patron de conception *Stratégie*                           | Oui        | Rousseau Rayane                  |
+| Des ennemis plus résistants / Patron de conception *Décorateur*                         | Non        | Clément Goustiaux                |
+| Rendre le joueur invulnérable après avoir subi un dommage / Patron de conception *Etat* | Oui        | Rousseau Rayane                  |
+| Différentes cartes pour le jeu / Patron de conception *Stratégie* ou *Proxy*            | Oui        | Rousseau Rayane, Etienne Focquet |
+| Différents types de bombes / Patron de conception *Décorateur* ou *Stratégie*           | Oui          | Samuel Tittelein                        |
+| Mise à jour du README.md                                                                | Oui        | Rousseau Rayane                  |
