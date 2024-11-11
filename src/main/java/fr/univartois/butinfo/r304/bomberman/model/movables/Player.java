@@ -2,30 +2,46 @@ package fr.univartois.butinfo.r304.bomberman.model.movables;
 
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
-import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * La classe {@link Player} représente le personnage joueur dans le jeu.
+ * Elle gère les points de vie, le score, les bombes et l'état temporaire d'invulnérabilité du joueur.
+ */
 public class Player extends AbstractMovable {
 
-    private final ObservableList<Bomb> bombs = FXCollections.observableArrayList();
-    private IntegerProperty score;
-    private IntegerProperty lives;
+    private final ObservableList<IBomb> bombs = FXCollections.observableArrayList();
+    private final IntegerProperty score;
+    private final IntegerProperty lives;
 
-    private long lastHitTime = 0; // Timestamp pour le cooldown de collision
-    private static final int COOLDOWN_TIME = 3000; // 3 secondes de cooldown (sinon il perd trop de pdv trop rapidement)
+    private long lastHitTime = 0; // Timestamp pour le dernier coup pris
+    private static final int COOLDOWN_TIME = 3000; // Durée d'invulnérabilité en ms
 
-    public Player(BombermanGame game, double xPosition, double yPosition, Sprite sprite) {
+    private final Sprite originalAppearance;
+    private final Sprite invulnerableAppearance;
+
+    /**
+     * Crée une nouvelle instance de {@link Player}.
+     *
+     * @param game               Le jeu auquel appartient le joueur.
+     * @param xPosition          La position initiale en x.
+     * @param yPosition          La position initiale en y.
+     * @param sprite             Apparence normale du joueur.
+     * @param invulnerableSprite Apparence du joueur en état d'invulnérabilité.
+     */
+    public Player(BombermanGame game, double xPosition, double yPosition, Sprite sprite, Sprite invulnerableSprite) {
         super(game, xPosition, yPosition, sprite);
+        this.originalAppearance = sprite;
+        this.invulnerableAppearance = invulnerableSprite;
         this.score = new SimpleIntegerProperty(0);
         this.lives = new SimpleIntegerProperty(3);
-    }
-
-    public IntegerProperty scoreProperty() {
-        return score;
     }
 
     public IntegerProperty getLivesProperty() {
@@ -40,15 +56,15 @@ public class Player extends AbstractMovable {
         this.score.set(this.score.get() + points);
     }
 
-    public IntegerProperty getBombsProperty() {
-        return new SimpleIntegerProperty(bombs.size());
+    public IntegerBinding getBombsProperty() {
+        return Bindings.size(this.bombs);
     }
 
-    public void addBomb(Bomb bomb) {
+    public void addBomb(IBomb bomb) {
         bombs.add(bomb);
     }
 
-    public ObservableList<Bomb> getBombs() {
+    public ObservableList<IBomb> getBombs() {
         return bombs;
     }
 
@@ -68,14 +84,16 @@ public class Player extends AbstractMovable {
         this.score.set(this.score.get() + points);
     }
 
-    public IntegerProperty livesProperty() {
-        return lives;
-    }
-
     public int getLives() {
         return lives.get();
     }
 
+    /**
+     * Réduit les points de vie du joueur.
+     * Si les points de vie tombent à zéro ou en dessous, la partie se termine.
+     *
+     * @param points Le nombre de points de vie à retirer.
+     */
     public void decreaseLives(int points) {
         this.lives.set(this.lives.get() - points);
         if (lives.get() <= 0) {
@@ -85,35 +103,44 @@ public class Player extends AbstractMovable {
 
     @Override
     public void explode() {
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastHitTime >= COOLDOWN_TIME) {
-            decreaseLives(1);
-            lastHitTime = currentTime; // Mise à jour du dernier temps de collision
-        }
+        takeDamage();
     }
 
     @Override
     public void hitEnemy() {
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastHitTime >= COOLDOWN_TIME) {
-            // TODO à sortir de player
-            decreaseLives(1);
-            lastHitTime = currentTime; // Mise à jour du dernier temps de collision
-        }
-    }
-
-    @Override
-    public boolean isEnemy() {
-        return super.isEnemy();
-    }
-
-    @Override
-    public boolean move(long delta) {
-        return super.move(delta);
+        takeDamage();
     }
 
     @Override
     public void collidedWith(IMovable other) {
+    }
 
+    /**
+     * Applique des dommages au joueur en fonction de son invulnérabilité temporaire.
+     */
+    public void takeDamage() {
+        long currentTime = System.currentTimeMillis();
+
+        // Si le cooldown est écoulé, le joueur prend des dégâts
+        if (currentTime - lastHitTime >= COOLDOWN_TIME) {
+            decreaseLives(1);
+            lastHitTime = currentTime; // Redémarre le cooldown
+            setSprite(invulnerableAppearance); // Change d'apparence
+
+            // Remet l'apparence originale après le cooldown
+            new Thread(() -> {
+                try {
+                    Thread.sleep(COOLDOWN_TIME);
+                    setSprite(originalAppearance);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

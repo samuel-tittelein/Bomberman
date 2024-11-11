@@ -25,6 +25,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -75,6 +76,7 @@ public final class Bomberman extends Application {
         Scene scene = new Scene(viewContent, GAME_WIDTH, GAME_HEIGHT);
         stage.setScene(scene);
         stage.setTitle("BombermanFX");
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
         stage.setResizable(false);
         stage.show();
     }

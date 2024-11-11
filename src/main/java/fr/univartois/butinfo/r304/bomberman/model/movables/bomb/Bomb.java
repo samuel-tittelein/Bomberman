@@ -3,6 +3,7 @@ package fr.univartois.butinfo.r304.bomberman.model.movables.bomb;
 import fr.univartois.butinfo.r304.bomberman.model.BombermanGame;
 import fr.univartois.butinfo.r304.bomberman.model.IMovable;
 import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
+import fr.univartois.butinfo.r304.bomberman.model.map.walls.Wall;
 import fr.univartois.butinfo.r304.bomberman.model.movables.AbstractMovable;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
@@ -12,12 +13,14 @@ import java.util.Objects;
 
 import static java.lang.System.currentTimeMillis;
 
-public class Bomb extends AbstractMovable {
+public class Bomb extends AbstractMovable implements IBomb{
 
     public static final long BOMB_LIFESPAN = 1700; // Durée de vie de 1.7 secondes
+    public static int DEFAULT_EXPLOSION_SIZE = 3;
     public static final SpriteStore spriteStore = new SpriteStore();
-    private final int explosionSize;
+    private int explosionSize;
     private long timeWhenDropped;
+
 
 
     /**
@@ -26,18 +29,51 @@ public class Bomb extends AbstractMovable {
      * @param game Le jeu Bomberman auquel cette bombe est liée.
      * @param xPosition La position en X où la bombe est placée.
      * @param yPosition La position en Y où la bombe est placée.
-     * @param explosionSprite Le sprite de l'explosion qui sera affiché après l'explosion.
+     * @param bombSprite Le sprite de l'explosion qui sera affiché après l'explosion.
      * @param explosionSize La taille de l'explosion (en nombre de cases).
      * <p>
      * L'attribut sprite est par défaut initialisé par {@link SpriteStore}
      * avec pour sprite le sprite "bomb".
      * </p>
      */
-    public Bomb(BombermanGame game, double xPosition, double yPosition, Sprite explosionSprite, int explosionSize) {
-        super(game, xPosition, yPosition, explosionSprite);
+    public Bomb(BombermanGame game, double xPosition, double yPosition, Sprite bombSprite, int explosionSize) {
+        super(game, xPosition, yPosition, bombSprite);
         this.explosionSize = explosionSize;
     }
 
+    /**
+     * Create a new instance of Bomb without explosionSize given using the DEFAULT_EXPLOSION_SIZE
+     * @param game the game
+     * @param xPosition the x position
+     * @param yPosition the y position
+     * @param bombSprite the bomb sprite
+     */
+    public Bomb(BombermanGame game, double xPosition, double yPosition,
+            Sprite bombSprite) {
+        this(game, xPosition, yPosition, bombSprite, DEFAULT_EXPLOSION_SIZE);
+    }
+
+    /**
+     * Create a new instance of Bomb without bombSprite given using default bomb.png
+     * @param game the game
+     * @param xPosition the x position
+     * @param yPosition the y position
+     * @param explosionSize the explosion size
+     */
+    public Bomb(BombermanGame game, double xPosition, double yPosition, int explosionSize) {
+        this(game, xPosition, yPosition, spriteStore.getSprite("bomb"), explosionSize);
+    }
+
+    /**
+     * Create a new instance of Bomb without explosionSize and bombSprite given using
+     * the DEFAULT_EXPLOSION_SIZE and the default bomb.png
+     * @param game the game
+     * @param xPosition the x position
+     * @param yPosition the y position
+     */
+    public Bomb(BombermanGame game, double xPosition, double yPosition) {
+        this(game, xPosition, yPosition, spriteStore.getSprite("bomb"), DEFAULT_EXPLOSION_SIZE);
+    }
 
     /**
      * Gère le déplacement de la bombe. Si le temps écoulé depuis le dépôt de la bombe dépasse
@@ -134,8 +170,14 @@ public class Bomb extends AbstractMovable {
         // Vérification de la cellule actuelle pour voir s'il y a un mur.
         Cell currentCell = game.getCellAt(x, y);
         if (currentCell.getWall() != null) {
-            // Si un mur est présent, le remplacer par une cellule vide (herbe, par exemple).
-            currentCell.replaceBy(new Cell(spriteStore.getSprite("lawn")));
+            currentCell.getWall().nextState(); // Le mur passe à l'état suivant.
+            Wall replace = currentCell.getWall(); // Le mur qui a été détruit.
+            if (replace.getState() == null) { // Le mur est un mur vide. TODO : trouver une autre implémentation
+                currentCell.replaceBy(new Cell(spriteStore.getSprite("lawn")));
+            } else {
+                currentCell.replaceBy(new Cell(replace));
+            }
+            //currentCell.replaceBy(new Cell(spriteStore.getSprite("lawn")));
             return;  // On arrête la propagation de l'explosion car un mur a été détruit.
         }
 
@@ -153,10 +195,8 @@ public class Bomb extends AbstractMovable {
 
     }
 
-
     public void drop(Cell cell) {
-        long currentTime = currentTimeMillis();
-        timeWhenDropped = currentTime;
+        timeWhenDropped = currentTimeMillis();
 
         int x = cell.getColumn() * cell.getWidth();
         int y = cell.getRow() * cell.getHeight();
@@ -167,6 +207,35 @@ public class Bomb extends AbstractMovable {
         game.addMovable(this);
     }
 
+    @Override
+    public int getExplosionSize() {
+        return explosionSize;
+    }
+
+    @Override
+    public void setExplosionSize(int size) {
+        this.explosionSize = size;
+    }
+
+    @Override
+    public void setBombSprite(Sprite sprite) {
+        super.setSprite(sprite);
+    }
+
+    @Override
+    public Sprite getBombSprite() {
+        return super.getSprite();
+    }
+
+    @Override
+    public void setTimeWhenDropped(long time) {
+        this.timeWhenDropped = time;
+    }
+
+    @Override
+    public long getTimeWhenDropped() {
+        return this.timeWhenDropped;
+    }
 
     @Override
     public boolean equals(Object object) {
@@ -180,5 +249,9 @@ public class Bomb extends AbstractMovable {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), timeWhenDropped, explosionSize);
+    }
+
+    public BombermanGame getGame() {
+        return game;
     }
 }

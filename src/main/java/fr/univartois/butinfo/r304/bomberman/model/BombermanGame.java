@@ -16,20 +16,25 @@
 
 package fr.univartois.butinfo.r304.bomberman.model;
 
-import java.security.spec.InvalidKeySpecException;
+import fr.univartois.butinfo.r304.bomberman.model.movables.EnemyHPDecorator;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.univartois.butinfo.r304.bomberman.model.map.Cell;
-import fr.univartois.butinfo.r304.bomberman.model.map.GameMap;
-import fr.univartois.butinfo.r304.bomberman.model.map.GameMapGenerator;
+import fr.univartois.butinfo.r304.bomberman.model.map.*;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Enemy;
 import fr.univartois.butinfo.r304.bomberman.model.movables.Player;
 import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.Bomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.IBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.HorizontalBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.LargeBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.bomb.special_bombs.VerticalBomb;
+import fr.univartois.butinfo.r304.bomberman.model.movables.strategy.ChaseMovementStrategy;
+import fr.univartois.butinfo.r304.bomberman.model.movables.strategy.RandomMovementStrategy;
 import fr.univartois.butinfo.r304.bomberman.view.ISpriteStore;
 import fr.univartois.butinfo.r304.bomberman.view.Sprite;
-import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 import javafx.animation.AnimationTimer;
 
 /**
@@ -47,6 +52,26 @@ public final class BombermanGame {
     public static final double PLAYER_INITIAL_X = 100.0;  // Position initiale en X
     public static final double PLAYER_INITIAL_Y = 100.0;  // Position initiale en Y
 
+    private IMapGenerator mapGenerator; // Générateur de carte choisi pour cette partie
+
+    /**
+     * Définit le générateur de carte à utiliser pour cette partie.
+     *
+     * @param mapGenerator Le générateur de carte.
+     */
+    public void setMapGenerator(IMapGenerator mapGenerator) {
+        this.mapGenerator = mapGenerator;
+    }
+
+    private final List<IMapGenerator> generators = Arrays.asList(
+            new DefaultMapGenerator(),
+            new MapCroixGenerator(),
+            new RandomMapGenerator(),
+            new SpiralMapGenerator(),
+            new MazeMapGenerator(),
+            new IslandMapGenerator()
+    );
+
     /**
      * Le génarateur de nombres aléatoires utilisé dans le jeu.
      */
@@ -60,7 +85,7 @@ public final class BombermanGame {
     /**
      * Le nombre de bombes initialement disponibles pour le joueur.
      */
-    public static final int DEFAULT_BOMBS = 5;
+    public static final int DEFAULT_BOMBS = 500;
 
     /**
      * La largeur de la carte du jeu (en pixels).
@@ -169,6 +194,13 @@ public final class BombermanGame {
      */
     public void prepare() {
         gameMap = createMap();
+
+        if (mapGenerator != null) {
+            mapGenerator.fillMap(gameMap); // Utilise le générateur de carte sélectionné
+        } else {
+            new DefaultMapGenerator().fillMap(gameMap); // Générateur par défaut si aucun n’est défini
+        }
+
         controller.prepare(gameMap);
     }
 
@@ -179,19 +211,19 @@ public final class BombermanGame {
      */
     private GameMap createMap() {
         int cellSize = spriteStore.getSpriteSize();
-
         int mapWidthInCells = width / cellSize;
         int mapHeightInCells = height / cellSize;
 
-        GameMap map = new GameMap(mapHeightInCells,mapWidthInCells);
-        GameMapGenerator generator = new GameMapGenerator();
-        return generator.fillMap(map);
+        return new GameMap(mapHeightInCells, mapWidthInCells);
     }
 
     /**
      * Démarre la partie de Bomberman.
      */
     public void start() {
+        // Sélection d'une carte aléatoirement
+        this.mapGenerator = generators.get(RANDOM.nextInt(generators.size()));
+
         createMovables();
         initStatistics();
         animation.start();
@@ -205,28 +237,46 @@ public final class BombermanGame {
         clearAllMovables();
 
         // Création et placement du joueur sur la carte.
-        Sprite playerSprite = spriteStore.getSprite("guy"); // Le joueur prend le skin "guy"
-        player = new Player(this, PLAYER_INITIAL_X, PLAYER_INITIAL_Y, playerSprite);
+        Sprite playerSprite = spriteStore.getSprite("guy"); // Sprite normal
+        Sprite invulnerableSprite = spriteStore.getSprite("guy_invulnerable"); // Sprite pour l'invulnérabilité
+
+        // Initialisation du joueur avec le sprite normal et invulnérable
+        player = new Player(this, PLAYER_INITIAL_X, PLAYER_INITIAL_Y, playerSprite, invulnerableSprite);
+
         movableObjects.add(player);
         spawnMovable(player);
 
         // Ajout des bombes initiales pour le joueur.
         for (int i = 0; i < DEFAULT_BOMBS; i++) {
+            // ajoute une bombe horizontale
+            player.addBomb(new HorizontalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
+            // ajoute une bombe verticale
+            player.addBomb(new VerticalBomb(new Bomb(this, player.getXPosition(), player.getYPosition())));
+            // ajoute une bombe normale avec pour taille par défaut 3
             Bomb bomb = new Bomb(this, player.getXPosition(), player.getYPosition(), spriteStore.getSprite("bomb"), 3); // Taille de l'explosion fixée à 3
             player.addBomb(bomb);
+            // ajoute une grosse bombe (taille par défaut 8)
+            player.addBomb(new LargeBomb(new Bomb(this, player.getXPosition(), player.getYPosition(), 3)));
         }
 
-
-        // Création des ennemis sur la carte.
+        // Création des ennemis avec des stratégies de déplacement
         for (int i = 0; i < nbEnemies; i++) {
             Enemy enemy = new Enemy(this, 0, 0, spriteStore.getSprite("goblin"));
-            enemy.setHorizontalSpeed(DEFAULT_SPEED);
-            movableObjects.add(enemy);
-            spawnMovable(enemy);
+
+            if (i % 2 == 0) {
+                // Ennemi avec mouvement aléatoire
+                enemy.setMovementStrategy(new RandomMovementStrategy(5, this)); // Ajuste le 5 selon le pourcentage souhaité de changement de direction
+            } else {
+                // Ennemi agressif
+                enemy.setMovementStrategy(new ChaseMovementStrategy(player, this));
+            }
+
+            // Décorateur pour ajouter des points de vie à l'ennemi
+            EnemyHPDecorator decoratedEnemy = new EnemyHPDecorator(3, this, enemy);
+            movableObjects.add(decoratedEnemy);
+            spawnMovable(decoratedEnemy);
         }
     }
-
-
 
     /**
      * Initialie les statistiques de cette partie.
@@ -313,7 +363,7 @@ public final class BombermanGame {
      *
      * @param bomb La bombe à déposer.
      */
-    public void dropBomb(Bomb bomb) {
+    public void dropBomb(IBomb bomb) {
         bomb.drop(getCellOf(player));
     }
 
@@ -385,6 +435,7 @@ public final class BombermanGame {
      * Si c'était le dernier, le joueur gagne la partie.
      *
      * @param enemy L'ennemi qui a été tué.
+     *
      */
     public void enemyIsDead(IMovable enemy) {
         // Mettre à jour le score du joueur (exemple : +100 points par ennemi).
