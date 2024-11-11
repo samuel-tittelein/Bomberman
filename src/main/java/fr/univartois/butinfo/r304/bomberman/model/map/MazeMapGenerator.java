@@ -4,9 +4,8 @@ import fr.univartois.butinfo.r304.bomberman.model.map.walls.state.State;
 import fr.univartois.butinfo.r304.bomberman.model.map.walls.Wall;
 import fr.univartois.butinfo.r304.bomberman.view.SpriteStore;
 
-public class RandomMapGenerator implements IMapGenerator {
+public class MazeMapGenerator implements IMapGenerator {
 
-    public static final State DEFAULT_WALL_STATE = State.INTACT;
     private final SpriteStore spriteStore = new SpriteStore();
 
     @Override
@@ -18,10 +17,10 @@ public class RandomMapGenerator implements IMapGenerator {
             for (int j = 0; j < cols; j++) {
                 if (i == 0 || i == rows - 1 || j == 0 || j == cols - 1) {
                     map.setAt(i, j, new Cell(new Wall(State.INDESTRUCTIBLE))); // Bordures incassables
-                } else if (i % 2 == 0 && j % 2 == 0) {
-                    map.setAt(i, j, new Cell(new Wall(State.INDESTRUCTIBLE))); // Murs incassables toutes les deux cases
-                } else if (Math.random() < 0.3) { // Probabilité de 30% pour les murs destructibles
-                    map.setAt(i, j, new Cell(new Wall(DEFAULT_WALL_STATE)));
+                } else if ((i % 4 == 0 || j % 4 == 0) && Math.random() < 0.6) {
+                    map.setAt(i, j, new Cell(new Wall(State.INDESTRUCTIBLE))); // Labyrinthe avec murs incassables
+                } else if (Math.random() < 0.2) {
+                    map.setAt(i, j, new Cell(new Wall(State.INTACT))); // Murs destructibles aléatoires
                 } else {
                     map.setAt(i, j, new Cell(spriteStore.getSprite("lawn"))); // Pelouse
                 }

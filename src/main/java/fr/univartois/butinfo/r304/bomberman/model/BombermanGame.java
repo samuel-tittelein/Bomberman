@@ -17,6 +17,8 @@
 package fr.univartois.butinfo.r304.bomberman.model;
 
 import fr.univartois.butinfo.r304.bomberman.model.movables.EnemyHPDecorator;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -49,7 +51,27 @@ public final class BombermanGame {
     // Constantes pour la position initiale du joueur. (à modifier potentiellement plus tard)
     public static final double PLAYER_INITIAL_X = 100.0;  // Position initiale en X
     public static final double PLAYER_INITIAL_Y = 100.0;  // Position initiale en Y
-    private static final IMapGenerator MAP_CREATOR = new SecretMapGenerator();
+
+    private IMapGenerator mapGenerator; // Générateur de carte choisi pour cette partie
+
+    /**
+     * Définit le générateur de carte à utiliser pour cette partie.
+     *
+     * @param mapGenerator Le générateur de carte.
+     */
+    public void setMapGenerator(IMapGenerator mapGenerator) {
+        this.mapGenerator = mapGenerator;
+    }
+
+    private final List<IMapGenerator> generators = Arrays.asList(
+            new DefaultMapGenerator(),
+            new MapCroixGenerator(),
+            new RandomMapGenerator(),
+            new SpiralMapGenerator(),
+            new MazeMapGenerator(),
+            new IslandMapGenerator()
+    );
+
     /**
      * Le génarateur de nombres aléatoires utilisé dans le jeu.
      */
@@ -172,6 +194,13 @@ public final class BombermanGame {
      */
     public void prepare() {
         gameMap = createMap();
+
+        if (mapGenerator != null) {
+            mapGenerator.fillMap(gameMap); // Utilise le générateur de carte sélectionné
+        } else {
+            new DefaultMapGenerator().fillMap(gameMap); // Générateur par défaut si aucun n’est défini
+        }
+
         controller.prepare(gameMap);
     }
 
@@ -180,24 +209,24 @@ public final class BombermanGame {
      *
      * @return La carte du jeu ayant été créée.
      */
-
     private GameMap createMap() {
-
         int cellSize = spriteStore.getSpriteSize();
-
         int mapWidthInCells = width / cellSize;
         int mapHeightInCells = height / cellSize;
 
-        GameMap map = new GameMap(mapHeightInCells,mapWidthInCells);
-
-        MAP_CREATOR.fillMap(map);
-        return map;
+        return new GameMap(mapHeightInCells, mapWidthInCells);
     }
 
     /**
      * Démarre la partie de Bomberman.
      */
     public void start() {
+        // Sélection d'une carte aléatoirement
+        this.mapGenerator = generators.get(RANDOM.nextInt(generators.size()));
+
+        // Préparation de la carte et initialisation du jeu
+        prepare();
+
         createMovables();
         initStatistics();
         animation.start();
