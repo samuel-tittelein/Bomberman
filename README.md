@@ -10,12 +10,22 @@ de cette page.
 Lorsque ce sera fait, vous pourrez inviter les membres de votre groupe en tant
 que *Developer* pour vous permettre de travailler ensemble sur ce projet.
 
+## Membres du Projet
+
+- [Romain Wallon](https://gitlab.univ-artois.fr/romain_wallon) : *Creator*
+- [Rayane Rousseau](https://gitlab.univ-artois.fr/rayane_rousseau) : *Developer / Chef de projet*
+- [Samuel Tittelein](https://gitlab.univ-artois.fr/samuel_tittelein) : *Developer*
+- [Etienne Focquet](https://gitlab.univ-artois.fr/etienne_focquet) : *Developer*
+- [Clément Goustiaux](https://gitlab.univ-artois.fr/clement_goustiaux) : *Developer*
+
 ## Consignes
 
 Vous pouvez retrouver ci-dessous les liens vers les sujets de TP vous guidant
 dans le développement de votre projet.
 
 - [Lancement du projet](https://gitlab.univ-artois.fr/enseignements-rwa/modules/but-2/r3-04/tp/-/tree/main/TP03)
+
+```plantuml
   @startuml
   package grA1.iutlens.lens_judge {
 
@@ -620,7 +630,6 @@ class Bomb {
 Bomb --|> AbstractMovable
 Bomb --> SpriteStore : << utilise >>
 Bomb --> Explosion : << utilise >>
-
 ```
 
 ## Tâches réalisées
@@ -643,11 +652,12 @@ Bomb --> Explosion : << utilise >>
 
 ### TP n°4
 
-| Fonctionnalité                                                                          | Terminée ? | Auteur(s)                        |
-|-----------------------------------------------------------------------------------------|------------|----------------------------------|
-| Variation des déplacements / Patron de conception *Stratégie*                           | Oui        | Rousseau Rayane                  |
-| Des ennemis plus résistants / Patron de conception *Décorateur*                         | Non        | Clément Goustiaux                |
-| Rendre le joueur invulnérable après avoir subi un dommage / Patron de conception *Etat* | Oui        | Rousseau Rayane                  |
-| Différentes cartes pour le jeu / Patron de conception *Stratégie* ou *Proxy*            | Oui        | Rousseau Rayane, Etienne Focquet |
-| Différents types de bombes / Patron de conception *Décorateur* ou *Stratégie*           | Oui          | Samuel Tittelein                        |
-| Mise à jour du README.md                                                                | Oui        | Rousseau Rayane                  |
+| Fonctionnalité                                                                          | Terminée ? | Auteur(s)                                          |
+|-----------------------------------------------------------------------------------------|------------|----------------------------------------------------|
+| Variation des déplacements des ennemis / Patron de conception *Stratégie*               | Oui        | Rousseau Rayane                                    |
+| Des ennemis plus résistants / Patron de conception *Décorateur*                         | Non        | Clément Goustiaux                                  |
+| Rendre le joueur invulnérable après avoir subi un dommage / Patron de conception *Etat* | Oui        | Rousseau Rayane                                    |
+| Différentes cartes pour le jeu / Patron de conception *Stratégie* ou *Proxy*            | Oui        | Rousseau Rayane, Etienne Focquet, Samuel Tittelein |
+| Murs plus résistants / Patron de conception *Etat*                                      | Oui        | Samuel Tittelein                                   |
+| Différents types de bombes / Patron de conception *Décorateur*                          | Oui        | Samuel Tittelein                                   |
+| Mise à jour du README.md                                                                | Oui        | Rousseau Rayane                                    |
